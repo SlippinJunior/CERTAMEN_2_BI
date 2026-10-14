@@ -144,7 +144,7 @@ Medidas derivadas para el cubo de la Fase 2: N° de ventas (`COUNT DISTINCT Vent
 
 ## 5. Modelo dimensional
 
-![Modelo dimensional](docs/diagrama_modelo_dimensional.png)
+![Modelo dimensional](docs/modelo_dimensional/diagrama_modelo_dimensional.png)
 
 **Tipo de modelo: estrella.** Las jerarquías Producto → Categoría, Sucursal → Comuna → Región y Empleado → Cargo se **desnormalizaron** dentro de su dimensión, porque:
 - las tablas de catálogo son muy pequeñas (3 a 13 filas), por lo que la redundancia es insignificante;
@@ -195,8 +195,6 @@ Proyecto: `etl/ETL_Albarran.sln` → paquete `ETL_Albarran.dtsx`. Se usan dos ad
 
 ### 7.1 Flujo de control
 
-![Control flow](docs/etl_control_flow.png)
-
 1. **SQL Preparar Carga** – `EXEC dbo.usp_PrepararCarga` (estrategia de carga completa).
 2. **SQL Cargar DimTiempo** – genera los días de 2017 y 2018 (730 filas).
 3. **SEQ Carga Dimensiones** – cinco *Data Flow Tasks* independientes que se ejecutan en paralelo.
@@ -217,8 +215,6 @@ Cada dimensión sigue el patrón **OLE DB Source → Derived Column → OLE DB D
 | DFT DimTipoDocumento | `SELECT DISTINCT` de `ventas.tipo_documento` normalizado | `TipoDocumento` capitalizado; `TipoVenta` (Persona natural / Empresa) |
 
 ### 7.3 Flujo de datos de los hechos
-
-![Data flow FactVentas](docs/etl_dataflow_fact.png)
 
 1. **SRC Ventas Detalle** – `ventas ⋈ detalle_ventas ⋈ productos`, con fecha convertida a `date`, tipo de documento normalizado y descuento con `ISNULL`.
 2. **CNT Filas Leidas** (*Row Count*).
