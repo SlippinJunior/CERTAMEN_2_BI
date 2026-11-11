@@ -1,0 +1,2598 @@
+﻿<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ParentObject>
+    <DatabaseID>OLAP_Albarran</DatabaseID>
+  </ParentObject>
+  <ObjectDefinition>
+    <Dimension xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500">
+      <ID>Dim Cliente</ID>
+      <Name>Dim Cliente</Name>
+      <Source xsi:type="DataSourceViewBinding">
+        <DataSourceViewID>Albarran_DW</DataSourceViewID>
+      </Source>
+      <Language>1033</Language>
+      <Collation>Modern_Spanish_CI_AS</Collation>
+      <UnknownMemberName>Unknown</UnknownMemberName>
+      <Attributes>
+        <Attribute>
+          <ID>Dim Cliente</ID>
+          <Name>Dim Cliente</Name>
+          <Usage>Key</Usage>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>Integer</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimCliente</TableID>
+                <ColumnID>ClienteKey</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <DataSize>255</DataSize>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimCliente</TableID>
+              <ColumnID>NombreCompleto</ColumnID>
+            </Source>
+          </NameColumn>
+          <AttributeRelationships>
+            <AttributeRelationship>
+              <AttributeID>Sexo</AttributeID>
+              <Name>Sexo</Name>
+            </AttributeRelationship>
+            <AttributeRelationship>
+              <AttributeID>Estado Civil</AttributeID>
+              <Name>Estado Civil</Name>
+            </AttributeRelationship>
+            <AttributeRelationship>
+              <AttributeID>Rango Etario</AttributeID>
+              <Name>Rango Etario</Name>
+            </AttributeRelationship>
+          </AttributeRelationships>
+        </Attribute>
+        <Attribute>
+          <ID>Sexo</ID>
+          <Name>Sexo</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimCliente</TableID>
+                <ColumnID>Sexo</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimCliente</TableID>
+              <ColumnID>Sexo</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+        <Attribute>
+          <ID>Estado Civil</ID>
+          <Name>Estado Civil</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimCliente</TableID>
+                <ColumnID>EstadoCivil</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimCliente</TableID>
+              <ColumnID>EstadoCivil</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+        <Attribute>
+          <ID>Rango Etario</ID>
+          <Name>Rango Etario</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimCliente</TableID>
+                <ColumnID>RangoEtario</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimCliente</TableID>
+              <ColumnID>RangoEtario</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+      </Attributes>
+      <Hierarchies>
+        <Hierarchy>
+          <ID>Segmento Demográfico</ID>
+          <Name>Segmento Demográfico</Name>
+          <Levels>
+            <Level>
+              <ID>Sexo</ID>
+              <Name>Sexo</Name>
+              <SourceAttributeID>Sexo</SourceAttributeID>
+            </Level>
+            <Level>
+              <ID>Rango Etario</ID>
+              <Name>Rango Etario</Name>
+              <SourceAttributeID>Rango Etario</SourceAttributeID>
+            </Level>
+            <Level>
+              <ID>Estado Civil</ID>
+              <Name>Estado Civil</Name>
+              <SourceAttributeID>Estado Civil</SourceAttributeID>
+            </Level>
+            <Level>
+              <ID>Dim Cliente</ID>
+              <Name>Dim Cliente</Name>
+              <SourceAttributeID>Dim Cliente</SourceAttributeID>
+            </Level>
+          </Levels>
+        </Hierarchy>
+      </Hierarchies>
+      <ProactiveCaching>
+        <SilenceInterval>-PT1S</SilenceInterval>
+        <Latency>-PT1S</Latency>
+        <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+        <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+        <Source xsi:type="ProactiveCachingInheritedBinding" />
+      </ProactiveCaching>
+    </Dimension>
+  </ObjectDefinition>
+</Create>
+<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ParentObject>
+    <DatabaseID>OLAP_Albarran</DatabaseID>
+  </ParentObject>
+  <ObjectDefinition>
+    <Dimension xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500">
+      <ID>Dim Tiempo</ID>
+      <Name>Dim Tiempo</Name>
+      <Source xsi:type="DataSourceViewBinding">
+        <DataSourceViewID>Albarran_DW</DataSourceViewID>
+      </Source>
+      <Language>1033</Language>
+      <Collation>Modern_Spanish_CI_AS</Collation>
+      <UnknownMemberName>Unknown</UnknownMemberName>
+      <Attributes>
+        <Attribute>
+          <ID>Dim Tiempo</ID>
+          <Name>Dim Tiempo</Name>
+          <Usage>Key</Usage>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>Integer</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimTiempo</TableID>
+                <ColumnID>TiempoKey</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <DataSize>10</DataSize>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimTiempo</TableID>
+              <ColumnID>Fecha</ColumnID>
+            </Source>
+          </NameColumn>
+          <AttributeRelationships>
+            <AttributeRelationship>
+              <AttributeID>Año</AttributeID>
+              <Name>Año</Name>
+            </AttributeRelationship>
+            <AttributeRelationship>
+              <AttributeID>Semestre</AttributeID>
+              <Name>Semestre</Name>
+            </AttributeRelationship>
+            <AttributeRelationship>
+              <AttributeID>Trimestre</AttributeID>
+              <Name>Trimestre</Name>
+            </AttributeRelationship>
+            <AttributeRelationship>
+              <AttributeID>Mes</AttributeID>
+              <Name>Mes</Name>
+            </AttributeRelationship>
+            <AttributeRelationship>
+              <AttributeID>Año Mes</AttributeID>
+              <Name>Año Mes</Name>
+            </AttributeRelationship>
+            <AttributeRelationship>
+              <AttributeID>Día de Semana</AttributeID>
+              <Name>Día de Semana</Name>
+            </AttributeRelationship>
+            <AttributeRelationship>
+              <AttributeID>Estación</AttributeID>
+              <Name>Estación</Name>
+            </AttributeRelationship>
+            <AttributeRelationship>
+              <AttributeID>Es Fin de Semana</AttributeID>
+              <Name>Es Fin de Semana</Name>
+            </AttributeRelationship>
+          </AttributeRelationships>
+        </Attribute>
+        <Attribute>
+          <ID>Año</ID>
+          <Name>Año</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>SmallInt</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimTiempo</TableID>
+                <ColumnID>Anio</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimTiempo</TableID>
+              <ColumnID>Anio</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+        <Attribute>
+          <ID>Semestre</ID>
+          <Name>Semestre</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>UnsignedTinyInt</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimTiempo</TableID>
+                <ColumnID>Semestre</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <DataSize>20</DataSize>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimTiempo</TableID>
+              <ColumnID>NombreSemestre</ColumnID>
+            </Source>
+          </NameColumn>
+          <OrderBy>Key</OrderBy>
+        </Attribute>
+        <Attribute>
+          <ID>Trimestre</ID>
+          <Name>Trimestre</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>UnsignedTinyInt</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimTiempo</TableID>
+                <ColumnID>Trimestre</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <DataSize>20</DataSize>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimTiempo</TableID>
+              <ColumnID>NombreTrimestre</ColumnID>
+            </Source>
+          </NameColumn>
+          <OrderBy>Key</OrderBy>
+        </Attribute>
+        <Attribute>
+          <ID>Mes</ID>
+          <Name>Mes</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>UnsignedTinyInt</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimTiempo</TableID>
+                <ColumnID>Mes</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <DataSize>20</DataSize>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimTiempo</TableID>
+              <ColumnID>NombreMes</ColumnID>
+            </Source>
+          </NameColumn>
+          <OrderBy>Key</OrderBy>
+        </Attribute>
+        <Attribute>
+          <ID>Año Mes</ID>
+          <Name>Año Mes</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <DataSize>7</DataSize>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimTiempo</TableID>
+                <ColumnID>AnioMes</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <DataSize>7</DataSize>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimTiempo</TableID>
+              <ColumnID>AnioMes</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+        <Attribute>
+          <ID>Día de Semana</ID>
+          <Name>Día de Semana</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>UnsignedTinyInt</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimTiempo</TableID>
+                <ColumnID>DiaSemana</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <DataSize>20</DataSize>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimTiempo</TableID>
+              <ColumnID>NombreDia</ColumnID>
+            </Source>
+          </NameColumn>
+          <OrderBy>Key</OrderBy>
+        </Attribute>
+        <Attribute>
+          <ID>Estación</ID>
+          <Name>Estación</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <DataSize>20</DataSize>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimTiempo</TableID>
+                <ColumnID>Estacion</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <DataSize>20</DataSize>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimTiempo</TableID>
+              <ColumnID>Estacion</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+        <Attribute>
+          <ID>Es Fin de Semana</ID>
+          <Name>Es Fin de Semana</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>Boolean</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimTiempo</TableID>
+                <ColumnID>EsFinDeSemana</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimTiempo</TableID>
+              <ColumnID>EsFinDeSemana</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+      </Attributes>
+      <Hierarchies>
+        <Hierarchy>
+          <ID>Calendario</ID>
+          <Name>Calendario</Name>
+          <Levels>
+            <Level>
+              <ID>Año</ID>
+              <Name>Año</Name>
+              <SourceAttributeID>Año</SourceAttributeID>
+            </Level>
+            <Level>
+              <ID>Semestre</ID>
+              <Name>Semestre</Name>
+              <SourceAttributeID>Semestre</SourceAttributeID>
+            </Level>
+            <Level>
+              <ID>Trimestre</ID>
+              <Name>Trimestre</Name>
+              <SourceAttributeID>Trimestre</SourceAttributeID>
+            </Level>
+            <Level>
+              <ID>Mes</ID>
+              <Name>Mes</Name>
+              <SourceAttributeID>Mes</SourceAttributeID>
+            </Level>
+            <Level>
+              <ID>Fecha</ID>
+              <Name>Fecha</Name>
+              <SourceAttributeID>Dim Tiempo</SourceAttributeID>
+            </Level>
+          </Levels>
+        </Hierarchy>
+        <Hierarchy>
+          <ID>Estacional</ID>
+          <Name>Estacional</Name>
+          <Levels>
+            <Level>
+              <ID>Año</ID>
+              <Name>Año</Name>
+              <SourceAttributeID>Año</SourceAttributeID>
+            </Level>
+            <Level>
+              <ID>Estación</ID>
+              <Name>Estación</Name>
+              <SourceAttributeID>Estación</SourceAttributeID>
+            </Level>
+            <Level>
+              <ID>Mes</ID>
+              <Name>Mes</Name>
+              <SourceAttributeID>Mes</SourceAttributeID>
+            </Level>
+          </Levels>
+        </Hierarchy>
+      </Hierarchies>
+      <ProactiveCaching>
+        <SilenceInterval>-PT1S</SilenceInterval>
+        <Latency>-PT1S</Latency>
+        <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+        <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+        <Source xsi:type="ProactiveCachingInheritedBinding" />
+      </ProactiveCaching>
+    </Dimension>
+  </ObjectDefinition>
+</Create>
+<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ParentObject>
+    <DatabaseID>OLAP_Albarran</DatabaseID>
+  </ParentObject>
+  <ObjectDefinition>
+    <Dimension xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500">
+      <ID>Dim Producto</ID>
+      <Name>Dim Producto</Name>
+      <Source xsi:type="DataSourceViewBinding">
+        <DataSourceViewID>Albarran_DW</DataSourceViewID>
+      </Source>
+      <Language>1033</Language>
+      <Collation>Modern_Spanish_CI_AS</Collation>
+      <UnknownMemberName>Unknown</UnknownMemberName>
+      <Attributes>
+        <Attribute>
+          <ID>Dim Producto</ID>
+          <Name>Dim Producto</Name>
+          <Usage>Key</Usage>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>Integer</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimProducto</TableID>
+                <ColumnID>ProductoKey</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <DataSize>255</DataSize>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimProducto</TableID>
+              <ColumnID>NombreProducto</ColumnID>
+            </Source>
+          </NameColumn>
+          <AttributeRelationships>
+            <AttributeRelationship>
+              <AttributeID>Categoría</AttributeID>
+              <Name>Categoría</Name>
+            </AttributeRelationship>
+            <AttributeRelationship>
+              <AttributeID>Rango de Precio</AttributeID>
+              <Name>Rango de Precio</Name>
+            </AttributeRelationship>
+            <AttributeRelationship>
+              <AttributeID>Descripción</AttributeID>
+              <Name>Descripción</Name>
+            </AttributeRelationship>
+          </AttributeRelationships>
+        </Attribute>
+        <Attribute>
+          <ID>Categoría</ID>
+          <Name>Categoría</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimProducto</TableID>
+                <ColumnID>Categoria</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimProducto</TableID>
+              <ColumnID>Categoria</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+        <Attribute>
+          <ID>Rango de Precio</ID>
+          <Name>Rango de Precio</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimProducto</TableID>
+                <ColumnID>RangoPrecio</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimProducto</TableID>
+              <ColumnID>RangoPrecio</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+        <Attribute>
+          <ID>Descripción</ID>
+          <Name>Descripción</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimProducto</TableID>
+                <ColumnID>Descripcion</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimProducto</TableID>
+              <ColumnID>Descripcion</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+      </Attributes>
+      <Hierarchies>
+        <Hierarchy>
+          <ID>Catálogo de Productos</ID>
+          <Name>Catálogo de Productos</Name>
+          <Levels>
+            <Level>
+              <ID>Categoría</ID>
+              <Name>Categoría</Name>
+              <SourceAttributeID>Categoría</SourceAttributeID>
+            </Level>
+            <Level>
+              <ID>Rango de Precio</ID>
+              <Name>Rango de Precio</Name>
+              <SourceAttributeID>Rango de Precio</SourceAttributeID>
+            </Level>
+            <Level>
+              <ID>Dim Producto</ID>
+              <Name>Dim Producto</Name>
+              <SourceAttributeID>Dim Producto</SourceAttributeID>
+            </Level>
+          </Levels>
+        </Hierarchy>
+      </Hierarchies>
+      <ProactiveCaching>
+        <SilenceInterval>-PT1S</SilenceInterval>
+        <Latency>-PT1S</Latency>
+        <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+        <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+        <Source xsi:type="ProactiveCachingInheritedBinding" />
+      </ProactiveCaching>
+    </Dimension>
+  </ObjectDefinition>
+</Create>
+<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ParentObject>
+    <DatabaseID>OLAP_Albarran</DatabaseID>
+  </ParentObject>
+  <ObjectDefinition>
+    <Cube xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500">
+      <ID>Cubo_Albarran</ID>
+      <Name>Cubo_Albarran</Name>
+      <Language>1033</Language>
+      <Collation>Modern_Spanish_CI_AS</Collation>
+      <Dimensions>
+        <Dimension>
+          <ID>Dim Tiempo</ID>
+          <Name>Dim Tiempo</Name>
+          <DimensionID>Dim Tiempo</DimensionID>
+          <Attributes>
+            <Attribute>
+              <AttributeID>Dim Tiempo</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Año</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Semestre</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Trimestre</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Mes</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Año Mes</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Día de Semana</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Estación</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Es Fin de Semana</AttributeID>
+            </Attribute>
+          </Attributes>
+          <Hierarchies>
+            <Hierarchy>
+              <HierarchyID>Calendario</HierarchyID>
+            </Hierarchy>
+            <Hierarchy>
+              <HierarchyID>Estacional</HierarchyID>
+            </Hierarchy>
+          </Hierarchies>
+        </Dimension>
+        <Dimension>
+          <ID>Dim Sucursal</ID>
+          <Name>Dim Sucursal</Name>
+          <DimensionID>Dim Sucursal</DimensionID>
+          <Attributes>
+            <Attribute>
+              <AttributeID>Dim Sucursal</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Región</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Comuna</AttributeID>
+            </Attribute>
+          </Attributes>
+          <Hierarchies>
+            <Hierarchy>
+              <HierarchyID>Geografía</HierarchyID>
+            </Hierarchy>
+          </Hierarchies>
+        </Dimension>
+        <Dimension>
+          <ID>Dim Producto</ID>
+          <Name>Dim Producto</Name>
+          <DimensionID>Dim Producto</DimensionID>
+          <Attributes>
+            <Attribute>
+              <AttributeID>Dim Producto</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Categoría</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Rango de Precio</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Descripción</AttributeID>
+            </Attribute>
+          </Attributes>
+          <Hierarchies>
+            <Hierarchy>
+              <HierarchyID>Catálogo de Productos</HierarchyID>
+            </Hierarchy>
+          </Hierarchies>
+        </Dimension>
+        <Dimension>
+          <ID>Dim Cliente</ID>
+          <Name>Dim Cliente</Name>
+          <DimensionID>Dim Cliente</DimensionID>
+          <Attributes>
+            <Attribute>
+              <AttributeID>Dim Cliente</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Sexo</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Estado Civil</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Rango Etario</AttributeID>
+            </Attribute>
+          </Attributes>
+          <Hierarchies>
+            <Hierarchy>
+              <HierarchyID>Segmento Demográfico</HierarchyID>
+            </Hierarchy>
+          </Hierarchies>
+        </Dimension>
+        <Dimension>
+          <ID>Dim Empleado</ID>
+          <Name>Dim Empleado</Name>
+          <DimensionID>Dim Empleado</DimensionID>
+          <Attributes>
+            <Attribute>
+              <AttributeID>Dim Empleado</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Cargo</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Sueldo Base Anual</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Sueldo Base</AttributeID>
+            </Attribute>
+          </Attributes>
+          <Hierarchies>
+            <Hierarchy>
+              <HierarchyID>Dotación Comercial</HierarchyID>
+            </Hierarchy>
+          </Hierarchies>
+        </Dimension>
+        <Dimension>
+          <ID>Dim Tipo Documento</ID>
+          <Name>Dim Tipo Documento</Name>
+          <DimensionID>Dim Tipo Documento</DimensionID>
+          <Attributes>
+            <Attribute>
+              <AttributeID>Dim Tipo Documento</AttributeID>
+            </Attribute>
+            <Attribute>
+              <AttributeID>Tipo de Venta</AttributeID>
+            </Attribute>
+          </Attributes>
+          <Hierarchies>
+            <Hierarchy>
+              <HierarchyID>Canal de Venta</HierarchyID>
+            </Hierarchy>
+          </Hierarchies>
+        </Dimension>
+      </Dimensions>
+      <MeasureGroups>
+        <MeasureGroup>
+          <ID>Fact Ventas</ID>
+          <Name>Fact Ventas</Name>
+          <Measures>
+            <Measure>
+              <ID>Cantidad</ID>
+              <Name>Cantidad</Name>
+              <DataType>Integer</DataType>
+              <Source>
+                <DataType>Integer</DataType>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>dbo_FactVentas</TableID>
+                  <ColumnID>Cantidad</ColumnID>
+                </Source>
+              </Source>
+              <FormatString>#,##0</FormatString>
+            </Measure>
+            <Measure>
+              <ID>Monto Bruto</ID>
+              <Name>Monto Bruto</Name>
+              <DataType>Currency</DataType>
+              <Source>
+                <DataType>Currency</DataType>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>dbo_FactVentas</TableID>
+                  <ColumnID>MontoBruto</ColumnID>
+                </Source>
+              </Source>
+              <FormatString>Currency</FormatString>
+            </Measure>
+            <Measure>
+              <ID>Monto Descuento</ID>
+              <Name>Monto Descuento</Name>
+              <DataType>Currency</DataType>
+              <Source>
+                <DataType>Currency</DataType>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>dbo_FactVentas</TableID>
+                  <ColumnID>MontoDescuento</ColumnID>
+                </Source>
+              </Source>
+              <FormatString>Currency</FormatString>
+            </Measure>
+            <Measure>
+              <ID>Monto Total</ID>
+              <Name>Monto Total</Name>
+              <DataType>Currency</DataType>
+              <Source>
+                <DataType>Currency</DataType>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>dbo_FactVentas</TableID>
+                  <ColumnID>MontoTotal</ColumnID>
+                </Source>
+              </Source>
+              <FormatString>Currency</FormatString>
+            </Measure>
+            <Measure>
+              <ID>Monto Neto</ID>
+              <Name>Monto Neto</Name>
+              <DataType>Currency</DataType>
+              <Source>
+                <DataType>Currency</DataType>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>dbo_FactVentas</TableID>
+                  <ColumnID>MontoNeto</ColumnID>
+                </Source>
+              </Source>
+              <FormatString>Currency</FormatString>
+            </Measure>
+            <Measure>
+              <ID>Monto IVA</ID>
+              <Name>Monto IVA</Name>
+              <DataType>Currency</DataType>
+              <Source>
+                <DataType>Currency</DataType>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>dbo_FactVentas</TableID>
+                  <ColumnID>MontoIVA</ColumnID>
+                </Source>
+              </Source>
+              <FormatString>Currency</FormatString>
+            </Measure>
+            <Measure>
+              <ID>Recuento Fact Ventas</ID>
+              <Name>Recuento Fact Ventas</Name>
+              <AggregateFunction>Count</AggregateFunction>
+              <DataType>BigInt</DataType>
+              <Source>
+                <DataType>BigInt</DataType>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>dbo_FactVentas</TableID>
+                  <ColumnID>FactVentaKey</ColumnID>
+                </Source>
+              </Source>
+              <FormatString>#,##0</FormatString>
+            </Measure>
+          </Measures>
+          <StorageMode>Molap</StorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+          <Dimensions>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Tiempo</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Tiempo</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>TiempoKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Año</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>SmallInt</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>Anio</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Semestre</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>UnsignedTinyInt</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>Semestre</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Trimestre</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>UnsignedTinyInt</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>Trimestre</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Mes</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>UnsignedTinyInt</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>Mes</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Año Mes</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <DataSize>7</DataSize>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>AnioMes</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Día de Semana</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>UnsignedTinyInt</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>DiaSemana</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Estación</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <DataSize>20</DataSize>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>Estacion</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Es Fin de Semana</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Boolean</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>EsFinDeSemana</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Sucursal</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Sucursal</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>SucursalKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Región</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimSucursal</TableID>
+                        <ColumnID>Region</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Comuna</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimSucursal</TableID>
+                        <ColumnID>Comuna</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Producto</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Producto</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>ProductoKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Categoría</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimProducto</TableID>
+                        <ColumnID>Categoria</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Rango de Precio</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimProducto</TableID>
+                        <ColumnID>RangoPrecio</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Descripción</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimProducto</TableID>
+                        <ColumnID>Descripcion</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Cliente</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Cliente</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>ClienteKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Sexo</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimCliente</TableID>
+                        <ColumnID>Sexo</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Estado Civil</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimCliente</TableID>
+                        <ColumnID>EstadoCivil</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Rango Etario</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimCliente</TableID>
+                        <ColumnID>RangoEtario</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Empleado</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Empleado</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>EmpleadoKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Cargo</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimEmpleado</TableID>
+                        <ColumnID>Cargo</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Sueldo Base Anual</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimEmpleado</TableID>
+                        <ColumnID>SueldoBaseAnual</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Sueldo Base</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimEmpleado</TableID>
+                        <ColumnID>SueldoBase</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Tipo Documento</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Tipo Documento</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>TipoDocumentoKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Tipo de Venta</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTipoDocumento</TableID>
+                        <ColumnID>TipoVenta</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+          </Dimensions>
+          <Partitions>
+            <Partition>
+              <ID>Fact Ventas</ID>
+              <Name>Fact Ventas</Name>
+              <Source xsi:type="DsvTableBinding">
+                <DataSourceViewID>Albarran_DW</DataSourceViewID>
+                <TableID>dbo_FactVentas</TableID>
+              </Source>
+              <StorageMode>Molap</StorageMode>
+              <ProcessingMode>Regular</ProcessingMode>
+              <ProactiveCaching>
+                <SilenceInterval>-PT1S</SilenceInterval>
+                <Latency>-PT1S</Latency>
+                <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+                <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+                <Source xsi:type="ProactiveCachingInheritedBinding" />
+              </ProactiveCaching>
+            </Partition>
+          </Partitions>
+          <ProactiveCaching>
+            <SilenceInterval>-PT1S</SilenceInterval>
+            <Latency>-PT1S</Latency>
+            <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+            <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+            <Source xsi:type="ProactiveCachingInheritedBinding" />
+          </ProactiveCaching>
+        </MeasureGroup>
+        <MeasureGroup>
+          <ID>Ventas Distintas</ID>
+          <Name>Ventas Distintas</Name>
+          <Measures>
+            <Measure>
+              <ID>Numero de Ventas</ID>
+              <Name>Numero de Ventas</Name>
+              <AggregateFunction>DistinctCount</AggregateFunction>
+              <DataType>Integer</DataType>
+              <Source>
+                <DataType>Integer</DataType>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>dbo_FactVentas</TableID>
+                  <ColumnID>VentaID</ColumnID>
+                </Source>
+              </Source>
+              <FormatString>#,##0</FormatString>
+            </Measure>
+          </Measures>
+          <StorageMode>Molap</StorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+          <Dimensions>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Tiempo</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Tiempo</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>TiempoKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Año</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>SmallInt</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>Anio</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Semestre</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>UnsignedTinyInt</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>Semestre</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Trimestre</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>UnsignedTinyInt</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>Trimestre</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Mes</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>UnsignedTinyInt</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>Mes</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Año Mes</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <DataSize>7</DataSize>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>AnioMes</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Día de Semana</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>UnsignedTinyInt</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>DiaSemana</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Estación</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <DataSize>20</DataSize>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>Estacion</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Es Fin de Semana</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Boolean</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>EsFinDeSemana</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Sucursal</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Sucursal</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>SucursalKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Región</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimSucursal</TableID>
+                        <ColumnID>Region</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Comuna</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimSucursal</TableID>
+                        <ColumnID>Comuna</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Producto</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Producto</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>ProductoKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Categoría</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimProducto</TableID>
+                        <ColumnID>Categoria</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Rango de Precio</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimProducto</TableID>
+                        <ColumnID>RangoPrecio</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Descripción</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimProducto</TableID>
+                        <ColumnID>Descripcion</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Cliente</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Cliente</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>ClienteKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Sexo</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimCliente</TableID>
+                        <ColumnID>Sexo</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Estado Civil</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimCliente</TableID>
+                        <ColumnID>EstadoCivil</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Rango Etario</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimCliente</TableID>
+                        <ColumnID>RangoEtario</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Empleado</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Empleado</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>EmpleadoKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Cargo</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimEmpleado</TableID>
+                        <ColumnID>Cargo</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Sueldo Base Anual</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimEmpleado</TableID>
+                        <ColumnID>SueldoBaseAnual</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Sueldo Base</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimEmpleado</TableID>
+                        <ColumnID>SueldoBase</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Tipo Documento</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Tipo Documento</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>TipoDocumentoKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Tipo de Venta</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTipoDocumento</TableID>
+                        <ColumnID>TipoVenta</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+          </Dimensions>
+          <Partitions>
+            <Partition>
+              <ID>Ventas Distintas</ID>
+              <Name>Ventas Distintas</Name>
+              <Source xsi:type="DsvTableBinding">
+                <DataSourceViewID>Albarran_DW</DataSourceViewID>
+                <TableID>dbo_FactVentas</TableID>
+              </Source>
+              <StorageMode>Molap</StorageMode>
+              <ProcessingMode>Regular</ProcessingMode>
+              <ProactiveCaching>
+                <SilenceInterval>-PT1S</SilenceInterval>
+                <Latency>-PT1S</Latency>
+                <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+                <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+                <Source xsi:type="ProactiveCachingInheritedBinding" />
+              </ProactiveCaching>
+            </Partition>
+          </Partitions>
+          <ProactiveCaching>
+            <SilenceInterval>-PT1S</SilenceInterval>
+            <Latency>-PT1S</Latency>
+            <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+            <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+            <Source xsi:type="ProactiveCachingInheritedBinding" />
+          </ProactiveCaching>
+        </MeasureGroup>
+        <MeasureGroup>
+          <ID>Clientes Activos</ID>
+          <Name>Clientes Activos</Name>
+          <Measures>
+            <Measure>
+              <ID>Clientes Activos</ID>
+              <Name>Clientes Activos</Name>
+              <AggregateFunction>DistinctCount</AggregateFunction>
+              <DataType>Integer</DataType>
+              <Source>
+                <DataType>Integer</DataType>
+                <Source xsi:type="ColumnBinding">
+                  <TableID>dbo_FactVentas</TableID>
+                  <ColumnID>ClienteKey</ColumnID>
+                </Source>
+              </Source>
+              <FormatString>#,##0</FormatString>
+            </Measure>
+          </Measures>
+          <StorageMode>Molap</StorageMode>
+          <ProcessingMode>Regular</ProcessingMode>
+          <Dimensions>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Tiempo</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Tiempo</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>TiempoKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Año</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>SmallInt</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>Anio</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Semestre</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>UnsignedTinyInt</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>Semestre</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Trimestre</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>UnsignedTinyInt</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>Trimestre</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Mes</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>UnsignedTinyInt</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>Mes</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Año Mes</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <DataSize>7</DataSize>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>AnioMes</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Día de Semana</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>UnsignedTinyInt</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>DiaSemana</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Estación</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <DataSize>20</DataSize>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>Estacion</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Es Fin de Semana</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Boolean</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTiempo</TableID>
+                        <ColumnID>EsFinDeSemana</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Sucursal</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Sucursal</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>SucursalKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Región</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimSucursal</TableID>
+                        <ColumnID>Region</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Comuna</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimSucursal</TableID>
+                        <ColumnID>Comuna</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Producto</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Producto</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>ProductoKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Categoría</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimProducto</TableID>
+                        <ColumnID>Categoria</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Rango de Precio</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimProducto</TableID>
+                        <ColumnID>RangoPrecio</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Descripción</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimProducto</TableID>
+                        <ColumnID>Descripcion</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Cliente</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Cliente</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>ClienteKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Sexo</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimCliente</TableID>
+                        <ColumnID>Sexo</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Estado Civil</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimCliente</TableID>
+                        <ColumnID>EstadoCivil</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Rango Etario</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimCliente</TableID>
+                        <ColumnID>RangoEtario</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Empleado</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Empleado</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>EmpleadoKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Cargo</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimEmpleado</TableID>
+                        <ColumnID>Cargo</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Sueldo Base Anual</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimEmpleado</TableID>
+                        <ColumnID>SueldoBaseAnual</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Sueldo Base</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimEmpleado</TableID>
+                        <ColumnID>SueldoBase</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+            <Dimension xsi:type="RegularMeasureGroupDimension">
+              <CubeDimensionID>Dim Tipo Documento</CubeDimensionID>
+              <Cardinality>One</Cardinality>
+              <Attributes>
+                <Attribute>
+                  <AttributeID>Dim Tipo Documento</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>Integer</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_FactVentas</TableID>
+                        <ColumnID>TipoDocumentoKey</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                  <Type>Granularity</Type>
+                </Attribute>
+                <Attribute>
+                  <AttributeID>Tipo de Venta</AttributeID>
+                  <KeyColumns>
+                    <KeyColumn>
+                      <DataType>WChar</DataType>
+                      <Source xsi:type="ColumnBinding">
+                        <TableID>dbo_DimTipoDocumento</TableID>
+                        <ColumnID>TipoVenta</ColumnID>
+                      </Source>
+                    </KeyColumn>
+                  </KeyColumns>
+                </Attribute>
+              </Attributes>
+            </Dimension>
+          </Dimensions>
+          <Partitions>
+            <Partition>
+              <ID>Clientes Activos</ID>
+              <Name>Clientes Activos</Name>
+              <Source xsi:type="DsvTableBinding">
+                <DataSourceViewID>Albarran_DW</DataSourceViewID>
+                <TableID>dbo_FactVentas</TableID>
+              </Source>
+              <StorageMode>Molap</StorageMode>
+              <ProcessingMode>Regular</ProcessingMode>
+              <ProactiveCaching>
+                <SilenceInterval>-PT1S</SilenceInterval>
+                <Latency>-PT1S</Latency>
+                <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+                <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+                <Source xsi:type="ProactiveCachingInheritedBinding" />
+              </ProactiveCaching>
+            </Partition>
+          </Partitions>
+          <ProactiveCaching>
+            <SilenceInterval>-PT1S</SilenceInterval>
+            <Latency>-PT1S</Latency>
+            <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+            <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+            <Source xsi:type="ProactiveCachingInheritedBinding" />
+          </ProactiveCaching>
+        </MeasureGroup>
+      </MeasureGroups>
+      <Source>
+        <DataSourceViewID>Albarran_DW</DataSourceViewID>
+      </Source>
+      <MdxScripts>
+        <MdxScript>
+          <ID>MdxScript</ID>
+          <Name>MdxScript</Name>
+          <Commands>
+            <Command>
+              <Text>CALCULATE;
+
+/* -------------------------------------------------------------------------
+   KPI 1: Crecimiento Mensual de Ventas (%)
+   ------------------------------------------------------------------------- */
+CREATE MEMBER CURRENTCUBE.[Measures].[Ventas Mes Anterior]
+AS ([Measures].[Monto Total], ParallelPeriod([Dim Tiempo].[Calendario].[Mes], 1, [Dim Tiempo].[Calendario].CurrentMember)),
+FORMAT_STRING = "Currency",
+VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Crecimiento Mensual Ventas %]
+AS IIF(IsEmpty([Measures].[Ventas Mes Anterior]) OR [Measures].[Ventas Mes Anterior] = 0,
+       NULL,
+       ([Measures].[Monto Total] - [Measures].[Ventas Mes Anterior]) / [Measures].[Ventas Mes Anterior]),
+FORMAT_STRING = "Percent",
+VISIBLE = 1;
+
+/* -------------------------------------------------------------------------
+   KPI 2: Ticket Promedio por Venta
+   ------------------------------------------------------------------------- */
+CREATE MEMBER CURRENTCUBE.[Measures].[Ticket Promedio]
+AS IIF([Measures].[Numero de Ventas] = 0, NULL, [Measures].[Monto Total] / [Measures].[Numero de Ventas]),
+FORMAT_STRING = "Currency",
+VISIBLE = 1;
+
+/* -------------------------------------------------------------------------
+   KPI 3: Participación de Ventas por Sucursal (%)
+   ------------------------------------------------------------------------- */
+CREATE MEMBER CURRENTCUBE.[Measures].[Participacion Sucursal %]
+AS IIF(([Dim Sucursal].[Geografía].[All], [Measures].[Monto Total]) = 0, NULL,
+       [Measures].[Monto Total] / ([Dim Sucursal].[Geografía].[All], [Measures].[Monto Total])),
+FORMAT_STRING = "Percent",
+VISIBLE = 1;
+
+/* -------------------------------------------------------------------------
+   KPI 4: Mix de Ventas por Categoría (%)
+   ------------------------------------------------------------------------- */
+CREATE MEMBER CURRENTCUBE.[Measures].[Participacion Categoria %]
+AS IIF(([Dim Producto].[Catálogo de Productos].[All], [Measures].[Monto Total]) = 0, NULL,
+       [Measures].[Monto Total] / ([Dim Producto].[Catálogo de Productos].[All], [Measures].[Monto Total])),
+FORMAT_STRING = "Percent",
+VISIBLE = 1;
+
+/* -------------------------------------------------------------------------
+   KPI 5: Ranking de Productos por Ventas
+   ------------------------------------------------------------------------- */
+CREATE MEMBER CURRENTCUBE.[Measures].[Ranking Producto]
+AS IIF(IsEmpty([Measures].[Monto Total]), NULL,
+       Rank([Dim Producto].[Dim Producto].CurrentMember,
+            Order([Dim Producto].[Dim Producto].[Dim Producto].Members, [Measures].[Monto Total], BDESC))),
+FORMAT_STRING = "#,##0",
+VISIBLE = 1;
+
+/* -------------------------------------------------------------------------
+   KPI 6: Productividad del Vendedor (Ventas / Costo Sueldo Anual)
+   ------------------------------------------------------------------------- */
+CREATE MEMBER CURRENTCUBE.[Measures].[Costo Sueldo Anual]
+AS ([Dim Empleado].[Dim Empleado].CurrentMember.Properties("Sueldo Base Anual", TYPED)),
+FORMAT_STRING = "Currency",
+VISIBLE = 1;
+
+CREATE MEMBER CURRENTCUBE.[Measures].[Productividad Vendedor]
+AS IIF([Measures].[Costo Sueldo Anual] = 0 OR IsEmpty([Measures].[Costo Sueldo Anual]),
+       NULL,
+       ([Measures].[Monto Total] / [Measures].[Costo Sueldo Anual]) * 100),
+FORMAT_STRING = "#,##0.0 \x",
+VISIBLE = 1;
+
+/* -------------------------------------------------------------------------
+   KPI 7: Porcentaje de Ventas con Factura (Canal B2B Empresa)
+   ------------------------------------------------------------------------- */
+CREATE MEMBER CURRENTCUBE.[Measures].[Pct Ventas Factura]
+AS IIF([Measures].[Numero de Ventas] = 0, NULL,
+       ([Dim Tipo Documento].[Tipo de Venta].&amp;[Empresa], [Measures].[Numero de Ventas])
+       / ([Dim Tipo Documento].[Tipo de Venta].[All], [Measures].[Numero de Ventas])),
+FORMAT_STRING = "Percent",
+VISIBLE = 1;
+
+/* -------------------------------------------------------------------------
+   KPI 8: Participación por Segmento Demográfico de Cliente (%)
+   ------------------------------------------------------------------------- */
+CREATE MEMBER CURRENTCUBE.[Measures].[Participacion Segmento Cliente %]
+AS IIF(([Dim Cliente].[Segmento Demográfico].[All], [Measures].[Monto Total]) = 0, NULL,
+       [Measures].[Monto Total] / ([Dim Cliente].[Segmento Demográfico].[All], [Measures].[Monto Total])),
+FORMAT_STRING = "Percent",
+VISIBLE = 1;
+
+/* -------------------------------------------------------------------------
+   KPI 9: Frecuencia de Compra por Cliente (Transacciones / Cliente Activo)
+   ------------------------------------------------------------------------- */
+CREATE MEMBER CURRENTCUBE.[Measures].[Frecuencia de Compra]
+AS IIF([Measures].[Clientes Activos] = 0, NULL,
+       [Measures].[Numero de Ventas] / [Measures].[Clientes Activos]),
+FORMAT_STRING = "#,##0.00",
+VISIBLE = 1;
+
+/* -------------------------------------------------------------------------
+   KPI 10: Descuento Promedio Otorgado (%)
+   ------------------------------------------------------------------------- */
+CREATE MEMBER CURRENTCUBE.[Measures].[Descuento Promedio %]
+AS IIF([Measures].[Monto Bruto] = 0, 0,
+       [Measures].[Monto Descuento] / [Measures].[Monto Bruto]),
+FORMAT_STRING = "Percent",
+VISIBLE = 1;</Text>
+            </Command>
+          </Commands>
+        </MdxScript>
+      </MdxScripts>
+      <Kpis>
+        <Kpi>
+          <ID>KPI 01 - Crecimiento Mensual</ID>
+          <Name>KPI 01 - Crecimiento Mensual</Name>
+          <Value>[Measures].[Crecimiento Mensual Ventas %]</Value>
+          <Goal>0.05</Goal>
+          <Status>Case When [Measures].[Crecimiento Mensual Ventas %] &gt;= 0.05 Then 1 When [Measures].[Crecimiento Mensual Ventas %] &gt;= 0 Then 0 Else -1 End</Status>
+          <Trend>Case When [Measures].[Crecimiento Mensual Ventas %] &gt; ( [Dim Tiempo].[Calendario].PrevMember, [Measures].[Crecimiento Mensual Ventas %] ) Then 1 When [Measures].[Crecimiento Mensual Ventas %] &lt; ( [Dim Tiempo].[Calendario].PrevMember, [Measures].[Crecimiento Mensual Ventas %] ) Then -1 Else 0 End</Trend>
+          <TrendGraphic>Standard Arrow</TrendGraphic>
+          <StatusGraphic>Traffic Light</StatusGraphic>
+        </Kpi>
+        <Kpi>
+          <ID>KPI 02 - Ticket Promedio</ID>
+          <Name>KPI 02 - Ticket Promedio</Name>
+          <Value>[Measures].[Ticket Promedio]</Value>
+          <Goal>1150000</Goal>
+          <Status>Case When [Measures].[Ticket Promedio] &gt;= 1150000 Then 1 When [Measures].[Ticket Promedio] &gt;= 1000000 Then 0 Else -1 End</Status>
+          <Trend>Case When [Measures].[Ticket Promedio] &gt; ( [Dim Tiempo].[Calendario].PrevMember, [Measures].[Ticket Promedio] ) Then 1 Else -1 End</Trend>
+          <TrendGraphic>Standard Arrow</TrendGraphic>
+          <StatusGraphic>Gauge</StatusGraphic>
+        </Kpi>
+        <Kpi>
+          <ID>KPI 03 - Participacion Sucursal</ID>
+          <Name>KPI 03 - Participacion Sucursal</Name>
+          <Value>[Measures].[Participacion Sucursal %]</Value>
+          <Goal>0.333</Goal>
+          <Status>Case When [Measures].[Participacion Sucursal %] &gt;= 0.333 Then 1 When [Measures].[Participacion Sucursal %] &gt;= 0.300 Then 0 Else -1 End</Status>
+          <Trend>0</Trend>
+          <TrendGraphic>Standard Arrow</TrendGraphic>
+          <StatusGraphic>Traffic Light</StatusGraphic>
+        </Kpi>
+        <Kpi>
+          <ID>KPI 06 - Productividad Vendedor</ID>
+          <Name>KPI 06 - Productividad Vendedor</Name>
+          <Value>[Measures].[Productividad Vendedor]</Value>
+          <Goal>20.0</Goal>
+          <Status>Case When [Measures].[Productividad Vendedor] &gt;= 20.0 Then 1 When [Measures].[Productividad Vendedor] &gt;= 15.0 Then 0 Else -1 End</Status>
+          <Trend>1</Trend>
+          <TrendGraphic>Standard Arrow</TrendGraphic>
+          <StatusGraphic>Gauge</StatusGraphic>
+        </Kpi>
+        <Kpi>
+          <ID>KPI 07 - Pct Ventas Factura</ID>
+          <Name>KPI 07 - Pct Ventas Factura</Name>
+          <Value>[Measures].[Pct Ventas Factura]</Value>
+          <Goal>0.20</Goal>
+          <Status>Case When [Measures].[Pct Ventas Factura] &gt;= 0.20 Then 1 When [Measures].[Pct Ventas Factura] &gt;= 0.15 Then 0 Else -1 End</Status>
+          <Trend>0</Trend>
+          <TrendGraphic>Standard Arrow</TrendGraphic>
+          <StatusGraphic>Traffic Light</StatusGraphic>
+        </Kpi>
+      </Kpis>
+      <ProactiveCaching>
+        <SilenceInterval>-PT1S</SilenceInterval>
+        <Latency>-PT1S</Latency>
+        <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+        <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+        <Source xsi:type="ProactiveCachingInheritedBinding" />
+      </ProactiveCaching>
+    </Cube>
+  </ObjectDefinition>
+</Create>
+<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ParentObject>
+    <DatabaseID>OLAP_Albarran</DatabaseID>
+  </ParentObject>
+  <ObjectDefinition>
+    <Dimension xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500">
+      <ID>Dim Sucursal</ID>
+      <Name>Dim Sucursal</Name>
+      <Source xsi:type="DataSourceViewBinding">
+        <DataSourceViewID>Albarran_DW</DataSourceViewID>
+      </Source>
+      <Language>1033</Language>
+      <Collation>Modern_Spanish_CI_AS</Collation>
+      <UnknownMemberName>Unknown</UnknownMemberName>
+      <Attributes>
+        <Attribute>
+          <ID>Dim Sucursal</ID>
+          <Name>Dim Sucursal</Name>
+          <Usage>Key</Usage>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>Integer</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimSucursal</TableID>
+                <ColumnID>SucursalKey</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <DataSize>255</DataSize>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimSucursal</TableID>
+              <ColumnID>NombreSucursal</ColumnID>
+            </Source>
+          </NameColumn>
+          <AttributeRelationships>
+            <AttributeRelationship>
+              <AttributeID>Región</AttributeID>
+              <Name>Región</Name>
+            </AttributeRelationship>
+            <AttributeRelationship>
+              <AttributeID>Comuna</AttributeID>
+              <Name>Comuna</Name>
+            </AttributeRelationship>
+          </AttributeRelationships>
+        </Attribute>
+        <Attribute>
+          <ID>Región</ID>
+          <Name>Región</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimSucursal</TableID>
+                <ColumnID>Region</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimSucursal</TableID>
+              <ColumnID>Region</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+        <Attribute>
+          <ID>Comuna</ID>
+          <Name>Comuna</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimSucursal</TableID>
+                <ColumnID>Comuna</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimSucursal</TableID>
+              <ColumnID>Comuna</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+      </Attributes>
+      <Hierarchies>
+        <Hierarchy>
+          <ID>Geografía</ID>
+          <Name>Geografía</Name>
+          <Levels>
+            <Level>
+              <ID>Región</ID>
+              <Name>Región</Name>
+              <SourceAttributeID>Región</SourceAttributeID>
+            </Level>
+            <Level>
+              <ID>Comuna</ID>
+              <Name>Comuna</Name>
+              <SourceAttributeID>Comuna</SourceAttributeID>
+            </Level>
+            <Level>
+              <ID>Dim Sucursal</ID>
+              <Name>Dim Sucursal</Name>
+              <SourceAttributeID>Dim Sucursal</SourceAttributeID>
+            </Level>
+          </Levels>
+        </Hierarchy>
+      </Hierarchies>
+      <ProactiveCaching>
+        <SilenceInterval>-PT1S</SilenceInterval>
+        <Latency>-PT1S</Latency>
+        <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+        <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+        <Source xsi:type="ProactiveCachingInheritedBinding" />
+      </ProactiveCaching>
+    </Dimension>
+  </ObjectDefinition>
+</Create>
+<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ParentObject>
+    <DatabaseID>OLAP_Albarran</DatabaseID>
+  </ParentObject>
+  <ObjectDefinition>
+    <Dimension xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500">
+      <ID>Dim Tipo Documento</ID>
+      <Name>Dim Tipo Documento</Name>
+      <Source xsi:type="DataSourceViewBinding">
+        <DataSourceViewID>Albarran_DW</DataSourceViewID>
+      </Source>
+      <Language>1033</Language>
+      <Collation>Modern_Spanish_CI_AS</Collation>
+      <UnknownMemberName>Unknown</UnknownMemberName>
+      <Attributes>
+        <Attribute>
+          <ID>Dim Tipo Documento</ID>
+          <Name>Dim Tipo Documento</Name>
+          <Usage>Key</Usage>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>Integer</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimTipoDocumento</TableID>
+                <ColumnID>TipoDocumentoKey</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <DataSize>255</DataSize>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimTipoDocumento</TableID>
+              <ColumnID>TipoDocumento</ColumnID>
+            </Source>
+          </NameColumn>
+          <AttributeRelationships>
+            <AttributeRelationship>
+              <AttributeID>Tipo de Venta</AttributeID>
+              <Name>Tipo de Venta</Name>
+            </AttributeRelationship>
+          </AttributeRelationships>
+        </Attribute>
+        <Attribute>
+          <ID>Tipo de Venta</ID>
+          <Name>Tipo de Venta</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimTipoDocumento</TableID>
+                <ColumnID>TipoVenta</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimTipoDocumento</TableID>
+              <ColumnID>TipoVenta</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+      </Attributes>
+      <Hierarchies>
+        <Hierarchy>
+          <ID>Canal de Venta</ID>
+          <Name>Canal de Venta</Name>
+          <Levels>
+            <Level>
+              <ID>Tipo de Venta</ID>
+              <Name>Tipo de Venta</Name>
+              <SourceAttributeID>Tipo de Venta</SourceAttributeID>
+            </Level>
+            <Level>
+              <ID>Dim Tipo Documento</ID>
+              <Name>Dim Tipo Documento</Name>
+              <SourceAttributeID>Dim Tipo Documento</SourceAttributeID>
+            </Level>
+          </Levels>
+        </Hierarchy>
+      </Hierarchies>
+      <ProactiveCaching>
+        <SilenceInterval>-PT1S</SilenceInterval>
+        <Latency>-PT1S</Latency>
+        <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+        <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+        <Source xsi:type="ProactiveCachingInheritedBinding" />
+      </ProactiveCaching>
+    </Dimension>
+  </ObjectDefinition>
+</Create>
+<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ParentObject>
+    <DatabaseID>OLAP_Albarran</DatabaseID>
+  </ParentObject>
+  <ObjectDefinition>
+    <Dimension xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500">
+      <ID>Dim Empleado</ID>
+      <Name>Dim Empleado</Name>
+      <Source xsi:type="DataSourceViewBinding">
+        <DataSourceViewID>Albarran_DW</DataSourceViewID>
+      </Source>
+      <Language>1033</Language>
+      <Collation>Modern_Spanish_CI_AS</Collation>
+      <UnknownMemberName>Unknown</UnknownMemberName>
+      <Attributes>
+        <Attribute>
+          <ID>Dim Empleado</ID>
+          <Name>Dim Empleado</Name>
+          <Usage>Key</Usage>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>Integer</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimEmpleado</TableID>
+                <ColumnID>EmpleadoKey</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <DataSize>255</DataSize>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimEmpleado</TableID>
+              <ColumnID>NombreCompleto</ColumnID>
+            </Source>
+          </NameColumn>
+          <AttributeRelationships>
+            <AttributeRelationship>
+              <AttributeID>Cargo</AttributeID>
+              <Name>Cargo</Name>
+            </AttributeRelationship>
+            <AttributeRelationship>
+              <AttributeID>Sueldo Base Anual</AttributeID>
+              <Name>Sueldo Base Anual</Name>
+            </AttributeRelationship>
+            <AttributeRelationship>
+              <AttributeID>Sueldo Base</AttributeID>
+              <Name>Sueldo Base</Name>
+            </AttributeRelationship>
+          </AttributeRelationships>
+        </Attribute>
+        <Attribute>
+          <ID>Cargo</ID>
+          <Name>Cargo</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimEmpleado</TableID>
+                <ColumnID>Cargo</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimEmpleado</TableID>
+              <ColumnID>Cargo</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+        <Attribute>
+          <ID>Sueldo Base Anual</ID>
+          <Name>Sueldo Base Anual</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimEmpleado</TableID>
+                <ColumnID>SueldoBaseAnual</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimEmpleado</TableID>
+              <ColumnID>SueldoBaseAnual</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+        <Attribute>
+          <ID>Sueldo Base</ID>
+          <Name>Sueldo Base</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimEmpleado</TableID>
+                <ColumnID>SueldoBase</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimEmpleado</TableID>
+              <ColumnID>SueldoBase</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+      </Attributes>
+      <Hierarchies>
+        <Hierarchy>
+          <ID>Dotación Comercial</ID>
+          <Name>Dotación Comercial</Name>
+          <Levels>
+            <Level>
+              <ID>Cargo</ID>
+              <Name>Cargo</Name>
+              <SourceAttributeID>Cargo</SourceAttributeID>
+            </Level>
+            <Level>
+              <ID>Dim Empleado</ID>
+              <Name>Dim Empleado</Name>
+              <SourceAttributeID>Dim Empleado</SourceAttributeID>
+            </Level>
+          </Levels>
+        </Hierarchy>
+      </Hierarchies>
+      <ProactiveCaching>
+        <SilenceInterval>-PT1S</SilenceInterval>
+        <Latency>-PT1S</Latency>
+        <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+        <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+        <Source xsi:type="ProactiveCachingInheritedBinding" />
+      </ProactiveCaching>
+    </Dimension>
+  </ObjectDefinition>
+</Create>

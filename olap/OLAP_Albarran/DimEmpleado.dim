@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ParentObject>
+    <DatabaseID>OLAP_Albarran</DatabaseID>
+  </ParentObject>
+  <ObjectDefinition>
+    <Dimension xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500">
+      <ID>Dim Empleado</ID>
+      <Name>Dim Empleado</Name>
+      <Source xsi:type="DataSourceViewBinding">
+        <DataSourceViewID>Albarran_DW</DataSourceViewID>
+      </Source>
+      <Language>1033</Language>
+      <Collation>Modern_Spanish_CI_AS</Collation>
+      <UnknownMemberName>Unknown</UnknownMemberName>
+      <Attributes>
+        <Attribute>
+          <ID>Dim Empleado</ID>
+          <Name>Dim Empleado</Name>
+          <Usage>Key</Usage>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>Integer</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimEmpleado</TableID>
+                <ColumnID>EmpleadoKey</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <DataSize>255</DataSize>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimEmpleado</TableID>
+              <ColumnID>NombreCompleto</ColumnID>
+            </Source>
+          </NameColumn>
+          <AttributeRelationships>
+            <AttributeRelationship>
+              <AttributeID>Cargo</AttributeID>
+              <Name>Cargo</Name>
+            </AttributeRelationship>
+            <AttributeRelationship>
+              <AttributeID>Sueldo Base Anual</AttributeID>
+              <Name>Sueldo Base Anual</Name>
+            </AttributeRelationship>
+            <AttributeRelationship>
+              <AttributeID>Sueldo Base</AttributeID>
+              <Name>Sueldo Base</Name>
+            </AttributeRelationship>
+          </AttributeRelationships>
+        </Attribute>
+        <Attribute>
+          <ID>Cargo</ID>
+          <Name>Cargo</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimEmpleado</TableID>
+                <ColumnID>Cargo</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimEmpleado</TableID>
+              <ColumnID>Cargo</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+        <Attribute>
+          <ID>Sueldo Base Anual</ID>
+          <Name>Sueldo Base Anual</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimEmpleado</TableID>
+                <ColumnID>SueldoBaseAnual</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimEmpleado</TableID>
+              <ColumnID>SueldoBaseAnual</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+        <Attribute>
+          <ID>Sueldo Base</ID>
+          <Name>Sueldo Base</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimEmpleado</TableID>
+                <ColumnID>SueldoBase</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimEmpleado</TableID>
+              <ColumnID>SueldoBase</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+      </Attributes>
+      <Hierarchies>
+        <Hierarchy>
+          <ID>Dotación Comercial</ID>
+          <Name>Dotación Comercial</Name>
+          <Levels>
+            <Level>
+              <ID>Cargo</ID>
+              <Name>Cargo</Name>
+              <SourceAttributeID>Cargo</SourceAttributeID>
+            </Level>
+            <Level>
+              <ID>Dim Empleado</ID>
+              <Name>Dim Empleado</Name>
+              <SourceAttributeID>Dim Empleado</SourceAttributeID>
+            </Level>
+          </Levels>
+        </Hierarchy>
+      </Hierarchies>
+      <ProactiveCaching>
+        <SilenceInterval>-PT1S</SilenceInterval>
+        <Latency>-PT1S</Latency>
+        <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+        <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+        <Source xsi:type="ProactiveCachingInheritedBinding" />
+      </ProactiveCaching>
+    </Dimension>
+  </ObjectDefinition>
+</Create>

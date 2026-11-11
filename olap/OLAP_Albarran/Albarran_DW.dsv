@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ParentObject>
+    <DatabaseID>OLAP_Albarran</DatabaseID>
+  </ParentObject>
+  <ObjectDefinition>
+    <DataSourceView xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500">
+      <ID>Albarran_DW</ID>
+      <Name>Albarran_DW</Name>
+      <DataSourceID>Albarran_DW</DataSourceID>
+      <Schema>
+        <xs:schema id="Albarran_DW" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop">
+          <xs:element name="Albarran_DW" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="dbo_DimTiempo" msprop:DbTableName="DimTiempo" msprop:TableType="Table">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="TiempoKey" type="xs:int" />
+                      <xs:element name="Fecha" type="xs:dateTime" />
+                      <xs:element name="Anio" type="xs:short" />
+                      <xs:element name="Semestre" type="xs:unsignedByte" />
+                      <xs:element name="NombreSemestre" type="xs:string" />
+                      <xs:element name="Trimestre" type="xs:unsignedByte" />
+                      <xs:element name="NombreTrimestre" type="xs:string" />
+                      <xs:element name="Mes" type="xs:unsignedByte" />
+                      <xs:element name="NombreMes" type="xs:string" />
+                      <xs:element name="AnioMes" type="xs:string" />
+                      <xs:element name="SemanaAnio" type="xs:unsignedByte" />
+                      <xs:element name="DiaMes" type="xs:unsignedByte" />
+                      <xs:element name="DiaSemana" type="xs:unsignedByte" />
+                      <xs:element name="NombreDia" type="xs:string" />
+                      <xs:element name="EsFinDeSemana" type="xs:boolean" />
+                      <xs:element name="Estacion" type="xs:string" />
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="dbo_DimCliente" msprop:DbTableName="DimCliente" msprop:TableType="Table">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="ClienteKey" type="xs:int" />
+                      <xs:element name="ClienteID" type="xs:int" />
+                      <xs:element name="Nombre" type="xs:string" />
+                      <xs:element name="ApellidoPaterno" type="xs:string" />
+                      <xs:element name="ApellidoMaterno" type="xs:string" />
+                      <xs:element name="NombreCompleto" type="xs:string" />
+                      <xs:element name="Sexo" type="xs:string" />
+                      <xs:element name="FechaNacimiento" type="xs:dateTime" minOccurs="0" />
+                      <xs:element name="Edad" type="xs:int" minOccurs="0" />
+                      <xs:element name="RangoEtario" type="xs:string" />
+                      <xs:element name="EstadoCivil" type="xs:string" />
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="dbo_DimEmpleado" msprop:DbTableName="DimEmpleado" msprop:TableType="Table">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="EmpleadoKey" type="xs:int" />
+                      <xs:element name="EmpleadoID" type="xs:int" />
+                      <xs:element name="Nombre" type="xs:string" />
+                      <xs:element name="ApellidoPaterno" type="xs:string" />
+                      <xs:element name="ApellidoMaterno" type="xs:string" />
+                      <xs:element name="NombreCompleto" type="xs:string" />
+                      <xs:element name="CargoID" type="xs:int" />
+                      <xs:element name="Cargo" type="xs:string" />
+                      <xs:element name="FechaContrato" type="xs:dateTime" minOccurs="0" />
+                      <xs:element name="AniosAntiguedad" type="xs:int" minOccurs="0" />
+                      <xs:element name="SueldoBase" type="xs:decimal" />
+                      <xs:element name="SueldoBaseAnual" type="xs:decimal" minOccurs="0" />
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="dbo_DimProducto" msprop:DbTableName="DimProducto" msprop:TableType="Table">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="ProductoKey" type="xs:int" />
+                      <xs:element name="ProductoID" type="xs:int" />
+                      <xs:element name="NombreProducto" type="xs:string" />
+                      <xs:element name="Descripcion" type="xs:string" />
+                      <xs:element name="CategoriaID" type="xs:int" />
+                      <xs:element name="Categoria" type="xs:string" />
+                      <xs:element name="PrecioLista" type="xs:decimal" />
+                      <xs:element name="RangoPrecio" type="xs:string" />
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="dbo_DimSucursal" msprop:DbTableName="DimSucursal" msprop:TableType="Table">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="SucursalKey" type="xs:int" />
+                      <xs:element name="SucursalID" type="xs:int" />
+                      <xs:element name="NombreSucursal" type="xs:string" />
+                      <xs:element name="ComunaID" type="xs:int" />
+                      <xs:element name="Comuna" type="xs:string" />
+                      <xs:element name="Region" type="xs:string" />
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="dbo_DimTipoDocumento" msprop:DbTableName="DimTipoDocumento" msprop:TableType="Table">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="TipoDocumentoKey" type="xs:int" />
+                      <xs:element name="TipoDocumentoCodigo" type="xs:string" />
+                      <xs:element name="TipoDocumento" type="xs:string" />
+                      <xs:element name="TipoVenta" type="xs:string" />
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="dbo_FactVentas" msprop:DbTableName="FactVentas" msprop:TableType="Table">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="FactVentaKey" type="xs:long" />
+                      <xs:element name="TiempoKey" type="xs:int" />
+                      <xs:element name="ClienteKey" type="xs:int" />
+                      <xs:element name="EmpleadoKey" type="xs:int" />
+                      <xs:element name="ProductoKey" type="xs:int" />
+                      <xs:element name="SucursalKey" type="xs:int" />
+                      <xs:element name="TipoDocumentoKey" type="xs:int" />
+                      <xs:element name="VentaID" type="xs:int" />
+                      <xs:element name="NumeroDocumento" type="xs:int" />
+                      <xs:element name="ProductoID" type="xs:int" />
+                      <xs:element name="Cantidad" type="xs:int" />
+                      <xs:element name="PrecioUnitario" type="xs:decimal" />
+                      <xs:element name="PrecioLista" type="xs:decimal" />
+                      <xs:element name="PorcentajeDescuento" type="xs:decimal" />
+                      <xs:element name="MontoBruto" type="xs:decimal" />
+                      <xs:element name="MontoDescuento" type="xs:decimal" />
+                      <xs:element name="MontoTotal" type="xs:decimal" />
+                      <xs:element name="MontoNeto" type="xs:decimal" />
+                      <xs:element name="MontoIVA" type="xs:decimal" />
+                      <xs:element name="FechaCarga" type="xs:dateTime" />
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+              </xs:choice>
+            </xs:complexType>
+            <xs:unique name="PK_DimTiempo" msdata:PrimaryKey="true">
+              <xs:selector xpath=".//dbo_DimTiempo" />
+              <xs:field xpath="TiempoKey" />
+            </xs:unique>
+            <xs:unique name="PK_DimCliente" msdata:PrimaryKey="true">
+              <xs:selector xpath=".//dbo_DimCliente" />
+              <xs:field xpath="ClienteKey" />
+            </xs:unique>
+            <xs:unique name="PK_DimEmpleado" msdata:PrimaryKey="true">
+              <xs:selector xpath=".//dbo_DimEmpleado" />
+              <xs:field xpath="EmpleadoKey" />
+            </xs:unique>
+            <xs:unique name="PK_DimProducto" msdata:PrimaryKey="true">
+              <xs:selector xpath=".//dbo_DimProducto" />
+              <xs:field xpath="ProductoKey" />
+            </xs:unique>
+            <xs:unique name="PK_DimSucursal" msdata:PrimaryKey="true">
+              <xs:selector xpath=".//dbo_DimSucursal" />
+              <xs:field xpath="SucursalKey" />
+            </xs:unique>
+            <xs:unique name="PK_DimTipoDocumento" msdata:PrimaryKey="true">
+              <xs:selector xpath=".//dbo_DimTipoDocumento" />
+              <xs:field xpath="TipoDocumentoKey" />
+            </xs:unique>
+            <xs:unique name="PK_FactVentas" msdata:PrimaryKey="true">
+              <xs:selector xpath=".//dbo_FactVentas" />
+              <xs:field xpath="FactVentaKey" />
+            </xs:unique>
+            <xs:keyref name="FK_FactVentas_DimTiempo" refer="PK_DimTiempo">
+              <xs:selector xpath=".//dbo_FactVentas" />
+              <xs:field xpath="TiempoKey" />
+            </xs:keyref>
+            <xs:keyref name="FK_FactVentas_DimCliente" refer="PK_DimCliente">
+              <xs:selector xpath=".//dbo_FactVentas" />
+              <xs:field xpath="ClienteKey" />
+            </xs:keyref>
+            <xs:keyref name="FK_FactVentas_DimEmpleado" refer="PK_DimEmpleado">
+              <xs:selector xpath=".//dbo_FactVentas" />
+              <xs:field xpath="EmpleadoKey" />
+            </xs:keyref>
+            <xs:keyref name="FK_FactVentas_DimProducto" refer="PK_DimProducto">
+              <xs:selector xpath=".//dbo_FactVentas" />
+              <xs:field xpath="ProductoKey" />
+            </xs:keyref>
+            <xs:keyref name="FK_FactVentas_DimSucursal" refer="PK_DimSucursal">
+              <xs:selector xpath=".//dbo_FactVentas" />
+              <xs:field xpath="SucursalKey" />
+            </xs:keyref>
+            <xs:keyref name="FK_FactVentas_DimTipoDocumento" refer="PK_DimTipoDocumento">
+              <xs:selector xpath=".//dbo_FactVentas" />
+              <xs:field xpath="TipoDocumentoKey" />
+            </xs:keyref>
+          </xs:element>
+        </xs:schema>
+        <Albarran_DW xmlns="" />
+      </Schema>
+    </DataSourceView>
+  </ObjectDefinition>
+</Create>

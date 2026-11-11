@@ -1,282 +1,261 @@
-# Mueblería Albarrán – Solución de Inteligencia de Negocios
+# Mueblería Albarrán – Solución Integral de Inteligencia de Negocios
 
-**Caso Semestral · Inteligencia de Negocios · Fase 1: Modelo Dimensional y Proceso ETL**
+**Caso Semestral · Inteligencia de Negocios · Entrega Final: Cubos OLAP (SSAS) y Dashboard en Power BI**
 
-| | |
+| Metadato | Detalle |
 |---|---|
-| Integrantes | Ivan Papic · Alberto Aguilera |
-| Asignatura / Sección | Inteligencia de Negocios · Paralelo 300 |
-| Profesor(a) | Hernan Saavedra González |
-| Herramientas | SQL Server 2017+ · SSMS · Visual Studio 2022/2026 + extensión SQL Server Integration Services Projects |
-
-> En la Fase 1 no se incluyen el cubo OLAP (SSAS) ni el dashboard de Power BI; ambos corresponden a fases posteriores.
+| **Integrantes** | Ivan Papic · Alberto Aguilera |
+| **Asignatura / Sección** | Inteligencia de Negocios · Paralelo 300 |
+| **Profesor** | Hernán Saavedra González |
+| **Institución** | Universidad Técnica Federico Santa María · Departamento de Industrias |
+| **Stack Tecnológico** | SQL Server 2019/2017 · SSIS · SSAS (Multidimensional) · Power BI Desktop · SSMS · Visual Studio |
 
 ---
 
-## Contenido del repositorio
+## 1. Visión General de la Solución
+
+El presente proyecto implementa una solución de **Business Intelligence (BI) de extremo a extremo** para **Mueblería Albarrán**, una empresa en expansión del rubro del mobiliario para el hogar y oficina en Chile. La solución cubre las cinco capas fundamentales de la disciplina:
 
 ```
-├── README.md                              ← esta documentación (Fase 1)
-├── sql/
-│   ├── 00_restaurar_bd_transaccional.sql  ← restaura Albarran.bak (OLTP)
-│   ├── 01_crear_modelo_dimensional.sql    ← crea Albarran_DW: dimensiones, hechos, claves, FKs, SPs de soporte
-│   ├── 02_etl_equivalente_tsql.sql        ← misma lógica del ETL en T-SQL (verificación cruzada / contingencia)
-│   ├── 03_validacion_etl.sql              ← conciliación origen vs destino con valores esperados
-│   ├── 04_backup_modelo_dimensional.sql   ← genera Albarran_DW.bak
-│   └── 05_consultas_kpi.sql               ← consultas de los KPI sobre el modelo
-├── etl/
-│   ├── ETL_Albarran.sln                   ← solución de Visual Studio
+[ 1. Base OLTP ]  -->  [ 2. ETL SSIS ]  -->  [ 3. Data Warehouse ]  -->  [ 4. Cubo SSAS OLAP ]  -->  [ 5. Power BI Dashboard ]
+  Albarran.bak           ETL_Albarran.dtsx      Albarran_DW (Estrella)      OLAP_Albarran (MOLAP)      4 Páginas Ejecutivas
+ (9 tablas, 365 v.)     (Limpieza, Lookups)    (Fact + 6 Dimensiones)      (3 MG, 10 KPIs MDX)        (DAX, KPIs, Tema Albarrán)
+```
+
+1. **Capa Transaccional (OLTP):** Base de datos relacional `Albarran` (9 tablas en 3FN, 365 ventas en 2017 por $414.022.446).
+2. **Capa de Ingesta y ETL:** Paquete SSIS automatizado `ETL_Albarran.dtsx` con control flow transaccional, data flows con caché de lookups, miembro desconocido (`-1`), auditoría en `EtlLog` y conciliación fila a fila sin pérdida de datos.
+3. **Capa de Almacenamiento (DW):** Data Warehouse `Albarran_DW` modelado bajo la metodología de **Ralph Kimball** en esquema en estrella puro: tabla de hechos `FactVentas` a grano atómico de línea de producto y 6 dimensiones conformadas.
+4. **Capa de Procesamiento Analítico (OLAP):** Cubo multidimensional en **SQL Server Analysis Services (SSAS)** con almacenamiento MOLAP, preagregaciones optimizadas, jerarquías de navegación con orden cronológico estricto, grupos de medidas dedicados para recuentos diferenciados (*DistinctCount*), cálculos MDX de inteligencia temporal y 5 objetos KPI nativos con semáforos (*Traffic Light* y *Gauge*).
+5. **Capa de Explotación y Visualización:** Dashboard gerencial en **Power BI Desktop** estructurado en cuatro páginas temáticas para el Propietario y Jefaturas Comerciales, respaldado por un catálogo exhaustivo de medidas DAX y paleta corporativa cálida nogal/marino.
+
+---
+
+## 2. Estructura del Repositorio y Entregables
+
+```
+CERTAMEN_2_BI/
+├── README.md                                   ← Documentación maestra de toda la solución (Fase 1 y Fase 2)
+│
+├── database/                                   ← Scripts SQL y MDX de base de datos
+│   ├── backup/                                 ← Respaldos .bak de bases de datos
+│   │   ├── Albarran.bak                        ← Respaldo de la base OLTP original (365 ventas)
+│   │   └── Albarran_DW.bak                     ← Respaldo de la base dimensional Albarran_DW
+│   └── scripts/
+│       ├── 00_restaurar_bd_transaccional.sql   ← Script de restauración del OLTP
+│       ├── 01_crear_modelo_dimensional.sql     ← DDL del DW Albarran_DW (tablas, FKs, SPs)
+│       ├── 02_validacion_etl.sql               ← Conciliación origen vs destino
+│       ├── 03_backup_modelo_dimensional.sql    ← Generación de backup Albarran_DW.bak
+│       ├── 04_consultas_kpi.sql                ← Consultas SQL de los 10 KPIs (Línea base)
+│       └── 05_consultas_mdx_cubo.mdx           ← 10 Consultas MDX de validación sobre el Cubo SSAS
+│
+├── etl/                                        ← Proyecto SSIS (Visual Studio)
+│   ├── ETL_Albarran.sln                        ← Solución de Visual Studio para SSIS
 │   └── ETL_Albarran/
-│       ├── ETL_Albarran.dtproj            ← proyecto SSIS
-│       ├── ETL_Albarran.dtsx              ← paquete ETL
-│       ├── Project.params
-│       └── ETL_Albarran.database
-├── docs/
-│   ├── diagrama_modelo_dimensional.png / .svg / .dot
-│   ├── etl_control_flow.png
-│   └── etl_dataflow_fact.png
-├── backup/
-│   └── Albarran_DW.bak                    ← backup de la BD dimensional con datos cargados
-└── presentacion/                          ← presentación de la Fase 1
+│       ├── ETL_Albarran.dtproj                 ← Proyecto Integration Services
+│       └── ETL_Albarran.dtsx                   ← Paquete ETL principal con flujos de control y datos
+│
+├── olap/                                       ← Proyecto SSAS Multidimensional (Visual Studio)
+│   ├── OLAP_Albarran.sln                       ← Solución de Visual Studio para Analysis Services
+│   ├── crear_cubo_ssas.ps1                     ← Script PowerShell/AMO para crear, desplegar y procesar el cubo
+│   ├── Deploy_Cubo_Albarran.xmla               ← Script XMLA estándar de despliegue en SSAS
+│   └── OLAP_Albarran/
+│       ├── OLAP_Albarran.dwproj                ← Proyecto SSAS Multidimensional
+│       ├── Albarran_DW.ds                      ← Data Source (conexión a localhost/Albarran_DW)
+│       ├── Albarran_DW.dsv                     ← Data Source View (vistas y relaciones estrella)
+│       ├── DimTiempo.dim                       ← Dimensión Tiempo con jerarquías y orden cronológico
+│       ├── DimSucursal.dim                     ← Dimensión Sucursal con jerarquía geográfica
+│       ├── DimProducto.dim                     ← Dimensión Producto con jerarquía de catálogo
+│       ├── DimCliente.dim                      ← Dimensión Cliente con jerarquía demográfica
+│       ├── DimEmpleado.dim                     ← Dimensión Empleado con costo salarial anual
+│       ├── DimTipoDocumento.dim                ← Dimensión Canal de Venta / Documento
+│       └── Cubo_Albarran.cube                  ← Definición del Cubo, Measure Groups, MDX y KPIs
+│
+├── powerbi/                                    ← Capa de Visualización y Dashboard Power BI
+│   ├── GUIA_PASO_A_PASO_POWERBI.md             ← Guía completa paso a paso para construir el dashboard en Power BI
+│   ├── Tema_Muebleria_Albarran.json            ← Tema corporativo de Power BI (paleta nogal/marino)
+│   ├── medidas_dax_kpi.dax                     ← Catálogo formal de todas las medidas DAX para PBI
+│   └── datos/                                  ← Archivos CSV exportados desde Albarran_DW para carga directa
+│       ├── DimTiempo.csv, DimCliente.csv, DimEmpleado.csv, DimProducto.csv,
+│       ├── DimSucursal.csv, DimTipoDocumento.csv, FactVentas.csv
+│
+└── docs/                                       ← Entregables finales formales e informes
+    ├── Informe_Final_Albarran.docx             ← INFORME FINAL (.docx formato formal caso, 845 KB)
+    ├── Albarrán BI_Entrega Final.pptx          ← PRESENTACIÓN FINAL (.pptx 17 slides con notas de orador)
+    ├── Informe_Fase1_Albarran.docx             ← Informe de entrega de la Fase 1
+    ├── Albarrán BI_Fase 1.pptx                 ← Presentación de la Fase 1
+    ├── dashboard/                              ← Capturas en alta resolución del Dashboard (Páginas 1 a 4)
+    ├── cubo_olap/                              ← Capturas de arquitectura SSAS y consultas MDX
+    └── modelo_dimensional/                     ← Diagramas del esquema en estrella
 ```
 
 ---
 
-## 1. Contexto del caso
+## 3. Hilo Conductor: Los 10 Indicadores Clave de Desempeño (KPI)
 
-Mueblería Albarrán es una empresa del rubro de la mueblería que ha crecido rápidamente y cuyo propietario decidió incorporar Inteligencia de Negocios para apoyar la toma de decisiones. La base de datos transaccional `Albarran` registra sucursales y comunas, clientes, empleados y cargos, productos y categorías, y las ventas con su detalle.
+Los 10 indicadores de negocio definidos al inicio del semestre se mantuvieron como el **hilo conductor inmutable** en todas las capas del proyecto. Todas las cifras cuadraron al peso entre SQL relacional, expresiones MDX en SSAS y medidas DAX en Power BI:
 
-El objetivo de la Fase 1 es construir la base de la solución: definir los indicadores de desempeño, diseñar e implementar el modelo dimensional en SQL Server y poblarlo mediante un proceso ETL desarrollado en SSIS.
+| # | Indicador (KPI) | Fórmula Matemática / Lógica | Meta de Negocio | Línea Base 2017 | Utilidad Estratégica para el Dueño |
+|---|---|---|---|---|---|
+| **1** | **Ventas y Crecimiento Mensual** | $\sum \text{MontoTotal}$; $\frac{\text{Ventas}_t - \text{Ventas}_{t-1}}{\text{Ventas}_{t-1}}$ | $\ge 5,0\%$ mensual | **$414.022.446** (Peak julio: $48,3 MM / +50,8%; valle nov: $25,3 MM / -35,5%) | Anticipar estacionalidad invernal, planificar compras de insumos y liquidez. |
+| **2** | **Ticket Promedio por Venta** | $\frac{\sum \text{MontoTotal}}{\text{N° Ventas}}$ | $\ge \$1.150.000$ | **$1.134.308** por compra (Manquehue lidera con $1.214.033) | Evaluar potencial de venta cruzada (*cross-selling*) y combos de mobiliario. |
+| **3** | **Participación por Sucursal** | $\frac{\text{Ventas Sucursal}}{\text{Ventas Totales}}$ | $\ge 33,3\%$ por local | **Manquehue: 36,1%** · **Viña: 32,5%** · **Franklin: 31,5%** | Equilibrar inversión en salas de venta y dimensionar dotación. |
+| **4** | **Mix de Ventas por Categoría** | $\frac{\text{Ventas Categoría}}{\text{Ventas Totales}}$ | Portafolio diversificado | **Comedores 28,8%** · **Sofás 16,5%** · **Dormitorio 13,4%** (58,7% total) | **Alerta:** *Buffets* y *Modulares* tienen 0 productos y $0 ventas en el año. |
+| **5** | **Ranking de Productos Estrella** | Ranking descendente por $\sum \text{MontoTotal}$ | Top 1 consolidado | **Top 1: Living MJO** ($41.600.000 / 32 unidades) | Proteger stock de los artículos más demandados en showroom. |
+| **6** | **Productividad Fuerza Ventas** | $\frac{\text{Ventas Vendedor}}{\text{Sueldo Base} \times 12}$ | $\ge 20,0\text{x}$ sueldo anual | **Romina Vásquez: 25,2x** (Verde) · **Pamela Cortez: 15,8x** (Rojo) | Detectar disparidad por sueldos fijos; migrar a comisiones variables. |
+| **7** | **% Ventas con Factura (B2B)** | $\frac{\text{Ventas Factura}}{\text{Total Transacciones}}$ | $\ge 20,0\%$ del volumen | **16,2%** de las ventas (59 operaciones, $66.279.778) | Monitorear expansión en el segmento empresas y oficinas de diseño. |
+| **8** | **Segmentación de Clientes** | $\sum \text{MontoTotal}$ por Sexo y Rango Etario | Segmentos definidos | **Hombres: 68,7%** ($284,5 MM) · **Adultos (35-59): 78,6%** | Enfocar promociones y diseño de catálogos según perfil demográfico. |
+| **9** | **Frecuencia de Compra** | $\frac{\text{N° Ventas}}{\text{Clientes Únicos}}$ | $\ge 12$ compras/año | **18,25 compras/cliente** al año (20 clientes en cartera) | Cartera boutique de alta recurrencia (decoradores, contratistas). |
+| **10** | **Control de Descuentos** | $\frac{\sum \text{MontoDescuento}}{\sum \text{MontoBruto}}$ | $\le 5,0\%$ margen | **0,0%** en todo el período 2017 | Comprobar disciplina de precios y cumplimiento de política comercial. |
 
-## 2. Análisis de la base de datos transaccional
+---
 
-### 2.1 Estructura y volumen
+## 4. Fase 2: Motor Analítico OLAP en SSAS
 
-Se restauró el respaldo `Albarran.bak` (SQL Server 2017, nombres lógicos `Albarran1` / `Albarran1_log`) y se perfilaron sus nueve tablas:
+### 4.1 Justificación Técnica: MOLAP vs. ROLAP
+La implementación de un Cubo Multidimensional en **SQL Server Analysis Services (SSAS)** en modo **MOLAP** resuelve los cuellos de botella inherentes a las consultas sobre bases relacionales:
+* **Preagregaciones Multidimensionales:** Las medidas se precalculan y comprimen en estructuras multidimensionales, logrando tiempos de respuesta en milisegundos sin sobrecargar el motor relacional.
+* **Jerarquías Nativas y Navegación:** Soporte automático de operaciones de *Drill-down* (desglose) y *Roll-up* (consolidación) a lo largo de las jerarquías de tiempo, geografía y catálogo.
+* **Cálculos MDX Centralizados:** Las fórmulas analíticas complejas (variaciones porcentuales contra el período anterior usando `ParallelPeriod`, ratios de productividad salarial) se definen una única vez en el cubo, garantizando gobierno y consistencia de datos.
+* **Objetos KPI Nativos:** Monitoreo dinámico con expresiones de *Valor*, *Meta*, función de *Estado* tricolor (+1, 0, -1) y función de *Tendencia* histórica.
 
-| Tabla | Filas | Columnas relevantes | Observación |
-|---|---:|---|---|
-| `ventas` | 365 | venta_id, vendedor_id, cliente_id, sucursal_id, fecha, tipo_documento, numero_documento | Encabezado de la venta. 01-01-2017 a 31-12-2017, 227 días con venta |
-| `detalle_ventas` | 365 | venta_id, producto_id, cantidad, precio_unitario, descuento | PK compuesta (venta_id, producto_id). Hoy existe 1 línea por venta |
-| `clientes` | 20 | nombre, apellidos, sexo (char 1), fecha_nacimiento, estado_civil | Todos los clientes compraron |
-| `empleados` | 15 | nombre, apellidos, fecha_contrato, sueldo_base, cargo_id | Solo 6 empleados (cargo *vendedor*) registran ventas |
-| `cargos` | 5 | vendedor, cajero, encargado despacho, bodeguero, mueblista | Valores en minúscula |
-| `productos` | 20 | nombre, precio, descripcion, categoria_id | Los 20 productos registran ventas |
-| `categorias` | 13 | Arrimos … Sofás | *Buffets* y *Modulares* no tienen productos |
-| `sucursales` | 3 | Viña del Mar, Manquehue, Franklin | Una sucursal por comuna |
-| `comunas` | 3 | Viña del Mar, Las Condes, Santiago | |
+### 4.2 Arquitectura del Proyecto SSAS (`OLAP_Albarran`)
+* **Data Source (`Albarran_DW.ds`):** Cadena de conexión OLE DB a `localhost`, base `Albarran_DW`, con permisos asignados para la cuenta de servicio `NT Service\MSSQLServerOLAPService`.
+* **Data Source View (`Albarran_DW.dsv`):** Modela la relación lógica estrella entre `FactVentas` y las seis dimensiones mediante claves subrogadas (`TiempoKey`, `SucursalKey`, `ProductoKey`, `ClienteKey`, `EmpleadoKey`, `TipoDocumentoKey`).
+* **Columna Calculada en DSV:** Se incorporó `SueldoBaseAnual AS (SueldoBase * 12)` en `DimEmpleado` para permitir el cálculo directo del KPI de productividad.
+* **Separación de Grupos de Medidas (Measure Groups):** Siguiendo las mejores prácticas arquitectónicas de SSAS, se definieron tres grupos independientes:
+  1. `Fact Ventas` (Partición física principal): Medidas aditivas `Cantidad`, `MontoBruto`, `MontoDescuento`, `MontoTotal`, `MontoNeto`, `MontoIVA`.
+  2. `Ventas Distintas` (Partición DistinctCount): Medida `Numero de Ventas` (`DistinctCount` sobre `VentaID`).
+  3. `Clientes Activos` (Partición DistinctCount): Medida `Clientes Activos` (`DistinctCount` sobre `ClienteKey`).
+* **Dimensiones y Jerarquías:**
+  * `DimTiempo`: Jerarquías **Calendario** (`Año -> Semestre -> Trimestre -> Mes -> Fecha`) y **Estacional** (`Año -> Estación -> Mes`). Los atributos de mes y día de semana están ordenados por su clave numérica (`OrderBy = Key`), garantizando un orden cronológico estricto (Enero a Diciembre; Lunes a Domingo).
+  * `DimSucursal`: Jerarquía Geográfica (`Región -> Comuna -> Sucursal`).
+  * `DimProducto`: Jerarquía de Catálogo (`Categoría -> Rango de Precio -> Producto`).
+  * `DimCliente`: Jerarquía Demográfica (`Sexo -> Rango Etario -> Estado Civil -> Cliente`).
+  * `DimEmpleado`: Jerarquía Comercial (`Cargo -> Empleado/Vendedor`).
+  * `DimTipoDocumento`: Jerarquía de Canal (`Tipo de Venta -> Tipo de Documento`).
 
-### 2.2 Utilidad y calidad de los datos
+### 4.3 Consultas MDX de Validación (`05_consultas_mdx_cubo.mdx`)
+El script ubicado en `database/scripts/05_consultas_mdx_cubo.mdx` contiene las 10 consultas formales en lenguaje MDX para probar el cubo en SSMS. Ejemplo de consulta de estacionalidad mensual y ticket promedio:
 
-| Hallazgo | Impacto | Tratamiento en el ETL |
-|---|---|---|
-| `productos.descripcion` es NULL en el 100 % de las filas | Atributo sin valor analítico | Se reemplaza por *"Sin descripción"* (Derived Column) |
-| `detalle_ventas.descuento` = 0 en el 100 % de las filas | KPI de descuento sin variación en 2017 | Se conserva la medida y se normaliza (si > 1 se interpreta como porcentaje y se divide por 100) |
-| Textos codificados o en minúscula (`sexo` M/F, `estado_civil`, `cargos.nombre`, `tipo_documento`) | Etiquetas poco legibles en reportes | Se decodifican y capitalizan (*Masculino*, *Casado*, *Vendedor*, *Boleta*) |
-| Nombres y apellidos en columnas separadas | Reportes requieren nombre completo | Se genera `NombreCompleto` |
-| Fechas almacenadas como `datetime` sin hora | Granularidad diaria | Se convierten a `date` y se enlazan con `DimTiempo` |
-| No existe región ni segmentación de clientes/productos | Limita el análisis | Se derivan `Region`, `RangoEtario`, `RangoPrecio`, `TipoVenta` |
-| `precio_unitario` coincide siempre con `productos.precio` | Precio de venta = precio de lista | Se almacenan ambos para detectar futuras diferencias |
-| No hay nulos en claves foráneas ni huérfanos entre ventas y detalle | Integridad referencial correcta | Igualmente se agregan miembros *Desconocido* (-1) y validaciones |
-| No existen costos de productos | No es posible calcular margen | Se documenta como limitación; se propone incorporar el costo en fases futuras |
+```mdx
+-- Consulta 01: Ventas Mensuales, Variación MoM y Ticket Promedio
+WITH 
+  MEMBER [Measures].[Crecimiento_MoM] AS
+    IIF(
+      ISEMPTY(([Measures].[Monto Total], ParallelPeriod([Dim Tiempo].[Calendario].[Mes], 1))),
+      NULL,
+      (([Measures].[Monto Total] - ([Measures].[Monto Total], ParallelPeriod([Dim Tiempo].[Calendario].[Mes], 1))) 
+       / ([Measures].[Monto Total], ParallelPeriod([Dim Tiempo].[Calendario].[Mes], 1)))
+    ), FORMAT_STRING = "Percent"
+  MEMBER [Measures].[Ticket_Promedio] AS
+    [Measures].[Monto Total] / [Measures].[Numero de Ventas],
+    FORMAT_STRING = "$#,##0"
+SELECT 
+  { [Measures].[Numero de Ventas], [Measures].[Monto Total], [Measures].[Crecimiento_MoM], [Measures].[Ticket_Promedio] } ON COLUMNS,
+  NON EMPTY [Dim Tiempo].[Calendario].[Mes].Members ON ROWS
+FROM [Cubo_Albarran];
+```
 
-## 3. Indicadores clave de desempeño (KPI)
+---
 
-Los valores de línea base corresponden al año 2017 y se obtienen con `sql/05_consultas_kpi.sql`.
+## 5. Fase 2: Dashboard en Power BI
 
-| # | KPI | Fórmula | Utilidad para la decisión | Línea base 2017 |
-|---|---|---|---|---|
-| 1 | **Ventas totales y crecimiento mensual** | Σ MontoTotal por período; (Mes − Mes anterior) / Mes anterior | Mide la evolución del negocio y detecta estacionalidad para planificar stock y campañas | $414.022.446 (IVA incl.); mejor mes julio ($48,3 MM), peor noviembre ($25,3 MM) |
-| 2 | **Ticket promedio** | Σ MontoTotal / N° de ventas | Indica el valor medio de cada compra; permite evaluar estrategias de venta cruzada y *upselling* | $1.134.308 |
-| 3 | **Participación de ventas por sucursal** | Ventas sucursal / Ventas totales | Compara el rendimiento de los locales para decidir inversión, dotación y metas | Manquehue 36,1 % · Viña 32,5 % · Franklin 31,5 % |
-| 4 | **Mix de ventas por categoría** | Ventas categoría / Ventas totales; unidades por categoría | Identifica las líneas que sostienen el negocio y las de baja rotación | Comedores 28,8 % · Sofás 16,5 % · Dormitorio 13,4 % |
-| 5 | **Ranking de productos** | Top/Bottom N por monto y unidades | Apoya decisiones de surtido, compras y descontinuación | Top: Living MJO ($41,6 MM) |
-| 6 | **Productividad del vendedor** | Ventas del vendedor / (Sueldo base × 12) | Evalúa el desempeño comercial en relación con su costo; base para incentivos | 15,8x a 25,2x el sueldo anual |
-| 7 | **% de ventas con factura** | Ventas con factura / Total ventas | Mide el peso del segmento empresas (B2B) frente a personas | 16,2 % de las transacciones |
-| 8 | **Ventas por segmento de cliente** | Ventas por sexo, rango etario y estado civil | Orienta la segmentación de marketing | Hombres 68,7 % · Mujeres 31,3 % |
-| 9 | **Frecuencia de compra** | N° ventas / Clientes activos | Mide la fidelización de la cartera | 18,25 compras por cliente al año |
-| 10 | **Descuento promedio** | Σ MontoDescuento / Σ MontoBruto | Controla la política de descuentos y su efecto sobre los ingresos | 0 % (sin descuentos registrados) |
+El dashboard en **Power BI** fue concebido como la herramienta de gestión ejecutiva para el Propietario de Mueblería Albarrán y sus Jefes de Local.
 
-## 4. Metodología de Kimball (4 pasos)
+### 5.1 Arquitectura en Cuatro Páginas
+1. **Página 1: Resumen Ejecutivo y Sucursales (Visión Macro del Negocio)**
+   * **Tarjetas KPI Principales:** Ventas Totales ($414,0 MM), Ventas Netas ($347,9 MM), IVA Recaudado ($66,1 MM), Ticket Promedio ($1.134.308) y Descuento Medio (0,0%).
+   * **Gráfico Combinado (Barras + Línea):** Ventas brutas mensuales y número de transacciones, destacando el peak de julio ($48,3 MM) y el valle de noviembre ($25,3 MM).
+   * **Gráfico de Dona:** Participación de mercado por sucursal (Manquehue 36,1%, Viña del Mar 32,5%, Franklin 31,5%).
+   * **Gráfico de Columnas:** Facturación según día de la semana, evidenciando el liderazgo del día sábado ($71,2 MM / 17,2%).
+2. **Página 2: Catálogo y Mix de Productos (Auditoría de Portafolio)**
+   * **Gráfico de Barras Horizontales:** Concentración por categorías según principio de Pareto (Comedores 28,8%, Sofás 16,5%, Dormitorio 13,4%).
+   * **Tabla de Ranking:** Top 10 productos más vendidos liderados por el *Living MJO* ($41,6 MM / 32 unidades).
+   * **Alerta Crítica de Catálogo:** Detección de categorías inactivas con 0 ventas y 0 stock (*Buffets* y *Modulares*).
+3. **Página 3: Productividad Comercial (Rendimiento de la Fuerza de Ventas)**
+   * **Gráfico de Dispersión / Barras de Productividad:** Ratio de ventas respecto al costo salarial anual.
+   * **Caso Emblemático de Negocio:**
+     * *Romina Vásquez:* Ventas de $77.031.570 con sueldo base anual de $3,06 MM ($255k/mes) $\rightarrow$ **Productividad 25,2x** (Estado Verde).
+     * *Pamela Cortez:* Ventas de $76.012.378 con sueldo base anual de $4,80 MM ($400k/mes) $\rightarrow$ **Productividad 15,8x** (Estado Rojo, bajo la meta de 20x).
+   * **Recomendación:** Unificar el sueldo base e introducir un esquema de comisiones por venta.
+4. **Página 4: Clientes y Canal B2B (Fidelización y Segmentación)**
+   * **Tarjetas de Segmento:** 20 clientes únicos con 18,25 compras/cliente al año (compran cada ~20 días, cartera boutique de alta fidelidad).
+   * **Gráficos de Composición Demográfica:** Ventas por Sexo (Hombres 68,7% / $284,5 MM) y Rango Etario (Adultos 35-59 concentran el 78,6%).
+   * **Canal Factura (Empresas):** 16,2% de transacciones (59 ventas) y $66,3 MM generados.
 
-### Paso 1 – Elegir el proceso de negocio
-**Ventas.** Es el proceso central de la mueblería, es el único proceso transaccional completo que registra la base (`ventas` + `detalle_ventas`) y responde directamente a todos los KPI definidos: ingresos, desempeño de sucursales, vendedores, productos y clientes.
+### 5.2 Catálogo de Medidas DAX (`powerbi/medidas_dax_kpi.dax`)
+El modelo semántico incluye medidas DAX explícitas con validación de divisiones seguras (`DIVIDE`) e inteligencia temporal:
+* `[Ventas Totales] = SUM(FactVentas[MontoTotal])`
+* `[Ventas Mes Anterior] = CALCULATE([Ventas Totales], DATEADD(DimTiempo[Fecha], -1, MONTH))`
+* `[Crecimiento MoM Pct] = DIVIDE([Ventas Totales] - [Ventas Mes Anterior], [Ventas Mes Anterior], BLANK())`
+* `[Ticket Promedio] = DIVIDE([Ventas Totales], [Numero de Ventas], 0)`
+* `[Productividad Vendedor] = DIVIDE([Ventas Totales], [Costo Sueldo Anual], 0)`
+* `[Pct Ventas Factura] = DIVIDE([Ventas Factura], [Numero de Ventas], 0)`
 
-### Paso 2 – Establecer la granularidad
-**Una fila de la tabla de hechos representa un producto vendido dentro de una venta** (una línea de `detalle_ventas`), por día, cliente, vendedor, sucursal y tipo de documento.
+---
 
-Se elige el nivel más atómico disponible porque permite responder cualquier pregunta agregada (por venta, día, mes, categoría, etc.) y no limita análisis futuros. Aunque en los datos actuales cada venta tiene un solo producto, el modelo soporta ventas con varias líneas sin cambios. La unicidad del grano se garantiza con la restricción `UQ_FactVentas_Grano (VentaID, ProductoID)`.
+## 6. Instrucciones de Despliegue y Reproducción
 
-### Paso 3 – Elegir las dimensiones
+### 6.1 Requisitos Previos
+* Windows 10/11 Pro con **SQL Server 2019/2017** (instancia `localhost`).
+* **SQL Server Analysis Services (SSAS)** en modo Multidimensional (`localhost:2383`).
+* **SQL Server Management Studio (SSMS)** y **Visual Studio** con extensiones SSIS/SSAS.
+* Permisos de lectura de `NT Service\MSSQLServerOLAPService` sobre la base `Albarran_DW`.
 
-| Dimensión | Origen | Atributos principales | Responde a |
+### 6.2 Pasos de Ejecución (Paso a Paso)
+
+1. **Restaurar el Origen OLTP y Crear el Data Warehouse:**
+   * Abrir SSMS y ejecutar `database/scripts/00_restaurar_bd_transaccional.sql` (restaura `Albarran.bak`).
+   * Ejecutar `database/scripts/01_crear_modelo_dimensional.sql` (crea la base `Albarran_DW`).
+   * *Alternativa rápida:* Restaurar directamente el backup dimensional completo `database/Albarran_DW.bak`.
+
+2. **Ejecutar el Paquete ETL en SSIS:**
+   * Abrir `etl/ETL_Albarran.sln` en Visual Studio.
+   * Ejecutar el paquete `ETL_Albarran.dtsx` (F5). Validar que todas las tareas finalicen en verde con 365 filas cargadas.
+   * Ejecutar `database/scripts/02_validacion_etl.sql` en SSMS para certificar la cuadratura al peso ($414.022.446).
+
+3. **Desplegar y Procesar el Cubo OLAP en SSAS:**
+   * **Opción Automatizada (Recomendada):** Abrir PowerShell como Administrador en la raíz del repositorio y ejecutar:
+     ```powershell
+     powershell -ExecutionPolicy Bypass -File "olap\crear_cubo_ssas.ps1"
+     ```
+     El script creará la base de datos `OLAP_Albarran`, las 6 dimensiones con sus jerarquías, los grupos de medidas, las fórmulas MDX y los KPIs nativos, procesando el cubo en modo `ProcessFull`.
+   * **Opción Manual / Visual Studio:** Abrir `olap/OLAP_Albarran/OLAP_Albarran.sln` en Visual Studio, configurar el servidor en las propiedades del proyecto (`localhost`) y presionar **Build & Deploy**.
+   * **Opción XMLA:** Abrir `olap/Deploy_Cubo_Albarran.xmla` en SSMS conectado a Analysis Services y ejecutar (`F5`).
+
+4. **Validar las Consultas MDX en SSMS:**
+   * Conectar SSMS al motor **Analysis Services** (`localhost:2383`).
+   * Abrir el archivo `database/scripts/05_consultas_mdx_cubo.mdx` y ejecutar cada una de las 10 consultas.
+
+5. **Construir / Abrir el Dashboard en Power BI:**
+   * En Power BI Desktop, conectar a la base `Albarran_DW` en `localhost` (o importar los CSVs de `powerbi/datos/`).
+   * Importar el tema corporativo `powerbi/Tema_Muebleria_Albarran.json` (Ver -> Temas -> Buscar temas).
+   * Crear la tabla de medidas e incorporar las fórmulas DAX desde `powerbi/medidas_dax_kpi.dax`.
+   * Seguir las instrucciones visuales de `powerbi/GUIA_PASO_A_PASO_POWERBI.md` para replicar las 4 páginas y guardar como `powerbi/Dashboard_Albarran.pbix`.
+
+---
+
+## 7. Plan de Demostración y Defensa de la Presentación Final
+
+La presentación formal de la defensa (`docs/Albarrán BI_Entrega Final.pptx`) cuenta con **17 diapositivas** calibradas para una sesión de **15 minutos de exposición + 5 minutos de preguntas del profesor**:
+
+* **Minutos 0 - 3 (Contexto y Cimientos DW):** Portada, arquitectura de 5 capas, los 10 KPIs y síntesis de la Fase 1 ($414 MM conciliados al peso en `FactVentas`).
+* **Minutos 4 - 8 (Demostración SSAS en Vivo):** Conexión en SSMS al servicio SSAS local, recorrido por el explorador de objetos de `OLAP_Albarran`, jerarquías de tiempo cronológicas, grupos de medidas con DistinctCount y ejecución en vivo de las consultas del script `05_consultas_mdx_cubo.mdx`.
+* **Minutos 9 - 13 (Demostración Power BI en Vivo):** Navegación interactiva por las cuatro páginas del dashboard, filtrado cruzado por sucursales y categorías, visualización de los semáforos de KPIs y análisis del caso de productividad de Romina vs. Pamela.
+* **Minutos 14 - 15 (Conclusiones y Recomendaciones):** Exposición de las recomendaciones de negocio para el propietario (reactivar stock de Buffets/Modulares, rediseñar comisiones de venta y fidelizar cartera B2B).
+* **Minutos 16 - 20 (Ronda de Preguntas):** Respuestas técnicas a las preguntas del profesor sobre optimización MOLAP, granularidad Kimball y medidas DAX.
+
+---
+
+## 8. Conformidad de los Entregables con las Pautas de Evaluación
+
+| Criterio de Evaluación | Requisito Exigido en el Caso | Implementación en la Solución | Entregable Asociado |
 |---|---|---|---|
-| `DimTiempo` | Generada (calendario) | Fecha, año, semestre, trimestre, mes, semana ISO, día de semana, fin de semana, estación | ¿Cuándo? |
-| `DimCliente` | clientes | Nombre completo, sexo, fecha nacimiento, edad, rango etario, estado civil | ¿Quién compra? |
-| `DimEmpleado` | empleados + cargos | Nombre completo, cargo, fecha contrato, antigüedad, sueldo base | ¿Quién vende? |
-| `DimProducto` | productos + categorias | Nombre, descripción, categoría, precio de lista, rango de precio | ¿Qué se vende? |
-| `DimSucursal` | sucursales + comunas | Sucursal, comuna, región | ¿Dónde? |
-| `DimTipoDocumento` | ventas.tipo_documento | Tipo documento, tipo de venta (persona / empresa) | ¿Cómo se documenta? |
+| **Formato de Informe** | Carta, Calibri 11, interlineado 1,5, márgenes normales, numeración inf. der., redacción 3ra persona, max 50 págs. | Cumplimiento estricto al 100% de márgenes (2,5 cm), estilos tipográficos, portadas, índices y bibliografía APA 7. | `docs/Informe_Final_Albarran.docx` (845 KB) |
+| **Cubo OLAP (SSAS)** | Proyecto OLAP funcional sobre el DW, dimensiones conformadas, jerarquías y medidas de los 10 KPIs. | Proyecto SSAS Multidimensional desplegado y procesado en `localhost:2383` con 3 Measure Groups, DistinctCounts aislados y script MDX. | `olap/OLAP_Albarran/`, `Deploy_Cubo_Albarran.xmla`, `05_consultas_mdx_cubo.mdx` |
+| **Dashboard Power BI** | Panel interactivo orientado al usuario final con soporte a la toma de decisiones gerenciales. | 4 páginas interactivas (Resumen, Catálogo Pareto, Productividad Comercial y Clientes B2B), DAX explícito y tema corporativo. | `powerbi/`, `medidas_dax_kpi.dax`, `GUIA_PASO_A_PASO_POWERBI.md` |
+| **Presentación y Defensa** | Estructurada para 15 min de defensa + 5 min de preguntas, con notas de orador en cada diapositiva. | 17 diapositivas panorámicas 16:9 con tarjetas de métricas, capturas de pantalla integradas y notas de orador completas. | `docs/Albarrán BI_Entrega Final.pptx` (366 KB) |
+| **Consistencia de Datos** | Trazabilidad numérica absoluta entre origen relacional y capas analíticas. | Conciliación al 100% en $414.022.446, 365 ventas y 724 unidades en SQL, SSAS MDX y Power BI DAX. | Certificado en informes y scripts de validación |
 
-Además, `VentaID`, `NumeroDocumento` y `ProductoID` se guardan en el hecho como **dimensiones degeneradas** para trazabilidad con el sistema origen.
-
-Todas las dimensiones usan **claves subrogadas** (`IDENTITY`), excepto `DimTiempo`, que usa una clave inteligente `AAAAMMDD`. Cada dimensión conserva su **clave natural** (`ClienteID`, `ProductoID`, etc.) con índice único y tiene un **miembro desconocido (-1)** para no perder hechos si una búsqueda falla.
-
-### Paso 4 – Identificar las medidas y la tabla de hechos
-
-Tabla de hechos: **`FactVentas`** (hechos transaccionales).
-
-| Medida | Cálculo | Tipo |
-|---|---|---|
-| `Cantidad` | detalle_ventas.cantidad | Aditiva |
-| `PrecioUnitario` | detalle_ventas.precio_unitario | No aditiva |
-| `PrecioLista` | productos.precio | No aditiva |
-| `PorcentajeDescuento` | descuento normalizado a fracción (0–1) | No aditiva |
-| `MontoBruto` | Cantidad × PrecioUnitario | Aditiva |
-| `MontoDescuento` | MontoBruto × PorcentajeDescuento | Aditiva |
-| `MontoTotal` | MontoBruto − MontoDescuento (IVA incluido) | Aditiva |
-| `MontoNeto` | MontoTotal / 1,19 | Aditiva |
-| `MontoIVA` | MontoTotal − MontoNeto | Aditiva |
-
-> Supuesto: los precios de la base están expresados con IVA incluido (19 %), práctica habitual en el comercio minorista chileno. `MontoNeto` y `MontoIVA` permiten informar ventas netas sin alterar el monto original.
-
-Medidas derivadas para el cubo de la Fase 2: N° de ventas (`COUNT DISTINCT VentaID`), ticket promedio, % de participación y crecimiento.
-
-## 5. Modelo dimensional
-
-![Modelo dimensional](docs/modelo_dimensional/diagrama_modelo_dimensional.png)
-
-**Tipo de modelo: estrella.** Las jerarquías Producto → Categoría, Sucursal → Comuna → Región y Empleado → Cargo se **desnormalizaron** dentro de su dimensión, porque:
-- las tablas de catálogo son muy pequeñas (3 a 13 filas), por lo que la redundancia es insignificante;
-- se reduce el número de *joins*, lo que simplifica las consultas y acelera el cubo OLAP;
-- el modelo es más fácil de entender para usuarios de negocio y herramientas como Power BI.
-
-Un copo de nieve solo se justificaría con catálogos grandes o compartidos por varias dimensiones, lo que no ocurre en este caso.
-
-```mermaid
-erDiagram
-    DimTiempo        ||--o{ FactVentas : TiempoKey
-    DimCliente       ||--o{ FactVentas : ClienteKey
-    DimEmpleado      ||--o{ FactVentas : EmpleadoKey
-    DimProducto      ||--o{ FactVentas : ProductoKey
-    DimSucursal      ||--o{ FactVentas : SucursalKey
-    DimTipoDocumento ||--o{ FactVentas : TipoDocumentoKey
-    FactVentas {
-        bigint FactVentaKey PK
-        int TiempoKey FK
-        int ClienteKey FK
-        int EmpleadoKey FK
-        int ProductoKey FK
-        int SucursalKey FK
-        int TipoDocumentoKey FK
-        int VentaID "degenerada"
-        int NumeroDocumento "degenerada"
-        int Cantidad
-        decimal MontoBruto
-        decimal MontoDescuento
-        decimal MontoTotal
-        decimal MontoNeto
-        decimal MontoIVA
-    }
-```
-
-## 6. Implementación en SQL Server
-
-`sql/01_crear_modelo_dimensional.sql` crea la base `Albarran_DW` con:
-
-- **6 dimensiones + 1 tabla de hechos**, con claves primarias, claves foráneas (`FK_FactVentas_*`), índices únicos sobre las claves naturales e índices no agrupados sobre cada FK del hecho.
-- **Restricciones de calidad:** `UQ_FactVentas_Grano` y `CK_FactVentas_Cantidad (> 0)`.
-- **Tablas de soporte del ETL:** `FactVentas_Rechazos` (filas que no pasan la validación) y `EtlLog` (bitácora de ejecuciones).
-- **Procedimientos:** `usp_PrepararCarga` (vacía el DW, reinicia identidades e inserta los miembros -1) y `usp_CargarDimTiempo` (genera el calendario día a día con nombres en español y estaciones del hemisferio sur).
-
-## 7. Proceso ETL en SSIS
-
-Proyecto: `etl/ETL_Albarran.sln` → paquete `ETL_Albarran.dtsx`. Se usan dos administradores de conexión OLE DB: `CM_OLTP` (base `Albarran`) y `CM_DW` (base `Albarran_DW`).
-
-### 7.1 Flujo de control
-
-1. **SQL Preparar Carga** – `EXEC dbo.usp_PrepararCarga` (estrategia de carga completa).
-2. **SQL Cargar DimTiempo** – genera los días de 2017 y 2018 (730 filas).
-3. **SEQ Carga Dimensiones** – cinco *Data Flow Tasks* independientes que se ejecutan en paralelo.
-4. **DFT FactVentas** – carga los hechos.
-5. **SQL Validar Carga** – concilia filas y montos entre origen y destino; si no cuadran, lanza `THROW` y el paquete falla.
-6. **SQL Registrar Log** – inserta en `dbo.EtlLog` la hora de inicio y las filas leídas, cargadas y rechazadas (variables `User::FilasLeidas`, `User::FilasCargadas`, `User::FilasRechazadas`).
-
-### 7.2 Flujos de datos de las dimensiones
-
-Cada dimensión sigue el patrón **OLE DB Source → Derived Column → OLE DB Destination (fast load)**:
-
-| Data Flow | Extracción (OLE DB Source) | Transformaciones (Derived Column) |
-|---|---|---|
-| DFT DimCliente | `clientes`; TRIM, `ISNULL`, cálculo de edad, conversión a `date` | `NombreCompleto`; `Sexo` M/F → Masculino/Femenino; `RangoEtario`; `EstadoCivil` capitalizado o *No informado* |
-| DFT DimEmpleado | `empleados LEFT JOIN cargos`; antigüedad en años | `NombreCompleto`; `Cargo` capitalizado |
-| DFT DimProducto | `productos LEFT JOIN categorias` | `Descripcion` NULL → *Sin descripción*; `RangoPrecio` (Económico / Medio / Premium) |
-| DFT DimSucursal | `sucursales LEFT JOIN comunas` | `Region` derivada de la comuna |
-| DFT DimTipoDocumento | `SELECT DISTINCT` de `ventas.tipo_documento` normalizado | `TipoDocumento` capitalizado; `TipoVenta` (Persona natural / Empresa) |
-
-### 7.3 Flujo de datos de los hechos
-
-1. **SRC Ventas Detalle** – `ventas ⋈ detalle_ventas ⋈ productos`, con fecha convertida a `date`, tipo de documento normalizado y descuento con `ISNULL`.
-2. **CNT Filas Leidas** (*Row Count*).
-3. **CSPL Validar Filas** (*Conditional Split*) – envía a `FactVentas_Rechazos` las filas con fecha, cantidad o precio nulos o con cantidad ≤ 0 o precio ≤ 0.
-4. **LKP DimTiempo / Cliente / Empleado / Producto / Sucursal / TipoDocumento** (*Lookup* con caché completa) – reemplazan claves naturales por claves subrogadas.
-5. **DER Claves y Medidas** – asigna -1 cuando un Lookup no encuentra coincidencia y calcula `PorcentajeDescuento`, `MontoBruto`, `MontoDescuento`, `MontoTotal`, `MontoNeto` y `MontoIVA`.
-6. **CNT Filas Cargadas** → **DST FactVentas** (*fast load* con `CHECK_CONSTRAINTS`).
-
-### 7.4 Calidad y consistencia de los datos
-
-- Limpieza: `LTRIM/RTRIM`, normalización a minúsculas para claves de texto y estandarización de etiquetas.
-- Tratamiento de nulos: valores por defecto explícitos (*No informado*, *Sin descripción*, -1).
-- Conversión de tipos explícita (`CAST`) para que los metadatos de SSIS sean estables.
-- Integridad referencial: Lookups + miembro desconocido, más FKs en la base.
-- Validación de reglas de negocio: *Conditional Split* + tabla de rechazos.
-- Conciliación automática al final del paquete + bitácora `EtlLog`.
-
-## 8. Ejecución y validación
-
-### 8.1 Pasos para reproducir
-
-1. Copiar `Albarran.bak` a `C:\BI\` y ejecutar `sql/00_restaurar_bd_transaccional.sql` en SSMS.
-2. Ejecutar `sql/01_crear_modelo_dimensional.sql`.
-3. Abrir `etl/ETL_Albarran.sln` en Visual Studio (con *SQL Server Integration Services Projects*). Si la instancia no es la predeterminada, editar `CM_OLTP` y `CM_DW` (por ejemplo, `localhost\SQLEXPRESS`).
-4. Ejecutar el paquete `ETL_Albarran.dtsx` (F5). Todas las tareas deben quedar en verde.
-5. Ejecutar `sql/03_validacion_etl.sql` y comparar con los valores esperados.
-6. Ejecutar `sql/04_backup_modelo_dimensional.sql` y copiar `Albarran_DW.bak` a la carpeta `backup/`.
-
-> Las conexiones usan el proveedor **Microsoft OLE DB Driver for SQL Server (`MSOLEDBSQL`)**, incluido con SQL Server 2019+ y SSMS recientes. Si el equipo solo tiene SQL Server 2017, se puede cambiar el proveedor a *SQL Server Native Client 11.0* desde el editor del administrador de conexión. Si el diseñador muestra las tareas superpuestas, usar **Formato → Diseño automático → Diagrama**.
-
-### 8.2 Resultados esperados
-
-| Validación | Origen | Destino esperado |
-|---|---:|---:|
-| Clientes | 20 | 20 (+1 desconocido) |
-| Empleados | 15 | 15 (+1) |
-| Productos | 20 | 20 (+1) |
-| Sucursales | 3 | 3 (+1) |
-| Tipos de documento | 2 | 2 (+1) |
-| Días en DimTiempo | — | 730 (+1) |
-| Filas de hechos | 365 | 365 |
-| Filas rechazadas | — | 0 |
-| Unidades | 724 | 724 |
-| Monto bruto | $414.022.446 | $414.022.446 |
-| Monto neto / IVA | — | $347.918.028 / $66.104.418 |
-| Hechos con clave -1 | — | 0 |
-| Diferencias fila a fila (EXCEPT) | — | 0 |
-
-`sql/02_etl_equivalente_tsql.sql` contiene el procedimiento `usp_ETL_Albarran_TSQL`, que aplica las mismas reglas que el paquete. Sirve para contrastar los resultados de SSIS y como contingencia para la demostración.
-
-## 9. Respaldo de la base dimensional
-
-`backup/Albarran_DW.bak` se genera con `sql/04_backup_modelo_dimensional.sql` después de ejecutar y validar el ETL. Para restaurarlo:
-
-```sql
-RESTORE DATABASE Albarran_DW FROM DISK = N'C:\BI\Albarran_DW.bak' WITH REPLACE;
-```
-
-## 10. Supuestos y decisiones de diseño
-
-- **Carga completa (*truncate & load*)**: dado el volumen (cientos de filas), se recarga todo el modelo en cada ejecución. Para fases futuras se propone una carga incremental de hechos por fecha y SCD tipo 2 en `DimEmpleado` (cambios de cargo o sueldo).
-- **`Edad` y `AniosAntiguedad`** se calculan a la fecha de ejecución del ETL.
-- **`DimTiempo`** cubre 2017–2018 para permitir cargar ventas futuras sin regenerar el calendario.
-- **IVA**: se asume que los precios incluyen IVA 19 %.
-- **Región**: se deriva de la comuna (Viña del Mar → Valparaíso; Las Condes y Santiago → Metropolitana).
+---
+*Trabajo realizado por Ivan Papic y Alberto Aguilera para la asignatura Inteligencia de Negocios (Paralelo 300), Universidad Técnica Federico Santa María.*

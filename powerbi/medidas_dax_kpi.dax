@@ -1,0 +1,152 @@
+// =====================================================================
+// Catálogo de Medidas DAX - Solución BI Mueblería Albarrán
+// Dashboard de Control y Monitoreo Estratégico en Power BI
+// =====================================================================
+
+// --- 1. MEDIDAS BASE ---
+
+[Monto Total Ventas] = 
+SUM(FactVentas[MontoTotal])
+
+[Monto Neto Ventas] = 
+SUM(FactVentas[MontoNeto])
+
+[Monto IVA Ventas] = 
+SUM(FactVentas[MontoIVA])
+
+[Monto Bruto Ventas] = 
+SUM(FactVentas[MontoBruto])
+
+[Monto Descuento Ventas] = 
+SUM(FactVentas[MontoDescuento])
+
+[Unidades Vendidas] = 
+SUM(FactVentas[Cantidad])
+
+[Numero de Transacciones] = 
+DISTINCTCOUNT(FactVentas[VentaID])
+
+[Clientes Activos] = 
+DISTINCTCOUNT(FactVentas[ClienteKey])
+
+
+// --- 2. LOS 10 INDICADORES CLAVE DE DESEMPEÑO (KPI) ---
+
+// KPI 1: Ventas Totales y Crecimiento Mensual (%)
+[Ventas Mes Anterior] = 
+CALCULATE(
+    [Monto Total Ventas],
+    DATEADD(DimTiempo[Fecha], -1, MONTH)
+)
+
+[Crecimiento Mensual Ventas %] = 
+DIVIDE(
+    [Monto Total Ventas] - [Ventas Mes Anterior],
+    [Ventas Mes Anterior],
+    BLANK()
+)
+
+// KPI 2: Ticket Promedio por Transacción
+[Ticket Promedio] = 
+DIVIDE(
+    [Monto Total Ventas],
+    [Numero de Transacciones],
+    BLANK()
+)
+
+// KPI 3: Participación de Ventas por Sucursal (%)
+[Participacion Sucursal %] = 
+DIVIDE(
+    [Monto Total Ventas],
+    CALCULATE([Monto Total Ventas], ALLSELECTED(DimSucursal)),
+    BLANK()
+)
+
+// KPI 4: Mix de Ventas por Categoría (%)
+[Participacion Categoria %] = 
+DIVIDE(
+    [Monto Total Ventas],
+    CALCULATE([Monto Total Ventas], ALLSELECTED(DimProducto[Categoria])),
+    BLANK()
+)
+
+// KPI 5: Ranking de Productos por Ventas
+[Ranking Producto Ventas] = 
+RANKX(
+    ALLSELECTED(DimProducto[NombreProducto]),
+    [Monto Total Ventas],
+    ,
+    DESC,
+    Dense
+)
+
+// KPI 6: Productividad del Vendedor (Ventas / Sueldo Anual)
+[Costo Sueldo Anual Vendedor] = 
+MAX(DimEmpleado[SueldoBaseAnual])
+
+[Productividad Vendedor (Veces)] = 
+DIVIDE(
+    [Monto Total Ventas],
+    [Costo Sueldo Anual Vendedor],
+    BLANK()
+)
+
+// KPI 7: Porcentaje de Ventas con Factura (Canal B2B Empresa)
+[Transacciones Factura B2B] = 
+CALCULATE(
+    [Numero de Transacciones],
+    DimTipoDocumento[TipoDocumento] = "Factura"
+)
+
+[Porcentaje Ventas Factura %] = 
+DIVIDE(
+    [Transacciones Factura B2B],
+    [Numero de Transacciones],
+    BLANK()
+)
+
+[Monto Ventas Factura B2B] = 
+CALCULATE(
+    [Monto Total Ventas],
+    DimTipoDocumento[TipoDocumento] = "Factura"
+)
+
+[Porcentaje Monto Factura %] = 
+DIVIDE(
+    [Monto Ventas Factura B2B],
+    [Monto Total Ventas],
+    BLANK()
+)
+
+// KPI 8: Participación por Segmento Demográfico de Cliente (%)
+[Participacion Sexo %] = 
+DIVIDE(
+    [Monto Total Ventas],
+    CALCULATE([Monto Total Ventas], ALLSELECTED(DimCliente[Sexo])),
+    BLANK()
+)
+
+// KPI 9: Frecuencia de Compra de la Cartera
+[Frecuencia de Compra (Compras/Cliente)] = 
+DIVIDE(
+    [Numero de Transacciones],
+    [Clientes Activos],
+    BLANK()
+)
+
+// KPI 10: Descuento Promedio Otorgado (%)
+[Descuento Promedio %] = 
+DIVIDE(
+    [Monto Descuento Ventas],
+    [Monto Bruto Ventas],
+    0
+)
+
+
+// --- 3. MEDIDAS DE FORMATO Y ESTADO PARA TARJETAS KPI ---
+
+[Estado Meta Productividad] = 
+IF([Productividad Vendedor (Veces)] >= 20.0, "Supera Meta (>= 20x)", "Bajo Meta (< 20x)")
+
+[Color Estado Productividad] = 
+IF([Productividad Vendedor (Veces)] >= 20.0, "#2E7D32", "#C62828")

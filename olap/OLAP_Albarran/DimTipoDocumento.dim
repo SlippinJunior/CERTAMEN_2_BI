@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+  <ParentObject>
+    <DatabaseID>OLAP_Albarran</DatabaseID>
+  </ParentObject>
+  <ObjectDefinition>
+    <Dimension xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:ddl500="http://schemas.microsoft.com/analysisservices/2013/engine/500" xmlns:ddl500_500="http://schemas.microsoft.com/analysisservices/2013/engine/500/500">
+      <ID>Dim Tipo Documento</ID>
+      <Name>Dim Tipo Documento</Name>
+      <Source xsi:type="DataSourceViewBinding">
+        <DataSourceViewID>Albarran_DW</DataSourceViewID>
+      </Source>
+      <Language>1033</Language>
+      <Collation>Modern_Spanish_CI_AS</Collation>
+      <UnknownMemberName>Unknown</UnknownMemberName>
+      <Attributes>
+        <Attribute>
+          <ID>Dim Tipo Documento</ID>
+          <Name>Dim Tipo Documento</Name>
+          <Usage>Key</Usage>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>Integer</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimTipoDocumento</TableID>
+                <ColumnID>TipoDocumentoKey</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <DataSize>255</DataSize>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimTipoDocumento</TableID>
+              <ColumnID>TipoDocumento</ColumnID>
+            </Source>
+          </NameColumn>
+          <AttributeRelationships>
+            <AttributeRelationship>
+              <AttributeID>Tipo de Venta</AttributeID>
+              <Name>Tipo de Venta</Name>
+            </AttributeRelationship>
+          </AttributeRelationships>
+        </Attribute>
+        <Attribute>
+          <ID>Tipo de Venta</ID>
+          <Name>Tipo de Venta</Name>
+          <KeyColumns>
+            <KeyColumn>
+              <DataType>WChar</DataType>
+              <Source xsi:type="ColumnBinding">
+                <TableID>dbo_DimTipoDocumento</TableID>
+                <ColumnID>TipoVenta</ColumnID>
+              </Source>
+            </KeyColumn>
+          </KeyColumns>
+          <NameColumn>
+            <DataType>WChar</DataType>
+            <Source xsi:type="ColumnBinding">
+              <TableID>dbo_DimTipoDocumento</TableID>
+              <ColumnID>TipoVenta</ColumnID>
+            </Source>
+          </NameColumn>
+        </Attribute>
+      </Attributes>
+      <Hierarchies>
+        <Hierarchy>
+          <ID>Canal de Venta</ID>
+          <Name>Canal de Venta</Name>
+          <Levels>
+            <Level>
+              <ID>Tipo de Venta</ID>
+              <Name>Tipo de Venta</Name>
+              <SourceAttributeID>Tipo de Venta</SourceAttributeID>
+            </Level>
+            <Level>
+              <ID>Dim Tipo Documento</ID>
+              <Name>Dim Tipo Documento</Name>
+              <SourceAttributeID>Dim Tipo Documento</SourceAttributeID>
+            </Level>
+          </Levels>
+        </Hierarchy>
+      </Hierarchies>
+      <ProactiveCaching>
+        <SilenceInterval>-PT1S</SilenceInterval>
+        <Latency>-PT1S</Latency>
+        <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+        <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+        <Source xsi:type="ProactiveCachingInheritedBinding" />
+      </ProactiveCaching>
+    </Dimension>
+  </ObjectDefinition>
+</Create>

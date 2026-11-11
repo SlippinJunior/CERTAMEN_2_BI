@@ -1,0 +1,186 @@
+/* =====================================================================
+   05 - Consultas MDX de los 10 KPI sobre el Cubo OLAP "Cubo_Albarran"
+   Mueblería Albarrán - Caso Semestral Inteligencia de Negocios - Fase 2
+   ---------------------------------------------------------------------
+   Demuestran que el cubo OLAP (SSAS Multidimensional) responde a los
+   10 indicadores de desempeño definidos al inicio del proyecto,
+   aplicando operaciones de navegación analítica: Slice, Dice, Roll-up
+   y Drill-down sobre las dimensiones y jerarquías.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   KPI 1: Ventas Totales y Crecimiento Mensual (%)
+   Operación: Drill-down temporal en la jerarquía Calendario.
+   Muestra la evolución mes a mes con el porcentaje de variación MoM.
+   --------------------------------------------------------------------- */
+SELECT
+    {
+        [Measures].[Monto Total],
+        [Measures].[Numero de Ventas],
+        [Measures].[Ventas Mes Anterior],
+        [Measures].[Crecimiento Mensual Ventas %]
+    } ON 0,
+    Descendants([Dim Tiempo].[Calendario].[Año].&[2017], [Dim Tiempo].[Calendario].[Mes]) ON 1
+FROM [Cubo_Albarran];
+
+
+/* ---------------------------------------------------------------------
+   KPI 2: Ticket Promedio por Venta (Global y por Sucursal)
+   Operación: Slice geográfico por sucursal.
+   Permite contrastar el valor medio de cada transacción.
+   --------------------------------------------------------------------- */
+SELECT
+    {
+        [Measures].[Monto Total],
+        [Measures].[Numero de Ventas],
+        [Measures].[Ticket Promedio]
+    } ON 0,
+    [Dim Sucursal].[Geografía].[Nombre Sucursal].Members ON 1
+FROM [Cubo_Albarran];
+
+
+/* ---------------------------------------------------------------------
+   KPI 3: Participación de Ventas por Sucursal y Región (%)
+   Operación: Roll-up jerárquico desde Región -> Comuna -> Sucursal.
+   --------------------------------------------------------------------- */
+SELECT
+    {
+        [Measures].[Monto Total],
+        [Measures].[Numero de Ventas],
+        [Measures].[Participacion Sucursal %]
+    } ON 0,
+    [Dim Sucursal].[Geografía].Members ON 1
+FROM [Cubo_Albarran];
+
+
+/* ---------------------------------------------------------------------
+   KPI 4: Mix de Ventas por Categoría de Producto (%)
+   Operación: Ordenamiento decreciente por monto total y participación.
+   --------------------------------------------------------------------- */
+SELECT
+    {
+        [Measures].[Cantidad],
+        [Measures].[Monto Total],
+        [Measures].[Participacion Categoria %]
+    } ON 0,
+    Order(
+        [Dim Producto].[Catálogo de Productos].[Categoría].Members,
+        [Measures].[Monto Total],
+        BDESC
+    ) ON 1
+FROM [Cubo_Albarran];
+
+
+/* ---------------------------------------------------------------------
+   KPI 5: Ranking de Productos (Top 5 por Monto y Unidades)
+   Operación: TopCount sobre el catálogo ordenado por ventas.
+   --------------------------------------------------------------------- */
+SELECT
+    {
+        [Measures].[Cantidad],
+        [Measures].[Monto Total],
+        [Measures].[Ticket Promedio]
+    } ON 0,
+    TopCount(
+        [Dim Producto].[Catálogo de Productos].[Nombre Producto].Members,
+        5,
+        [Measures].[Monto Total]
+    ) ON 1
+FROM [Cubo_Albarran];
+
+
+/* ---------------------------------------------------------------------
+   KPI 6: Productividad del Vendedor (Ventas / Costo Sueldo Anual)
+   Operación: Evaluación de retorno salarial ordenado por productividad.
+   Muestra que Romina Vásquez lidera en productividad (25,2x su sueldo anual)
+   mientras que Pamela Cortez genera 15,8x debido a su mayor sueldo base.
+   --------------------------------------------------------------------- */
+SELECT
+    {
+        [Measures].[Numero de Ventas],
+        [Measures].[Monto Total],
+        [Measures].[Ticket Promedio],
+        [Measures].[Costo Sueldo Anual],
+        [Measures].[Productividad Vendedor]
+    } ON 0,
+    Order(
+        Filter(
+            [Dim Empleado].[Dotación Comercial].[Dim Empleado].Members,
+            [Measures].[Monto Total] > 0
+        ),
+        [Measures].[Productividad Vendedor],
+        BDESC
+    ) ON 1
+FROM [Cubo_Albarran];
+
+
+/* ---------------------------------------------------------------------
+   KPI 7: Mix de Documentos y % Ventas con Factura (Canal B2B Empresa)
+   Operación: Comparación entre Boleta (Persona Natural) y Factura (Empresa).
+   --------------------------------------------------------------------- */
+SELECT
+    {
+        [Measures].[Numero de Ventas],
+        [Measures].[Monto Total],
+        [Measures].[Pct Ventas Factura]
+    } ON 0,
+    [Dim Tipo Documento].[Canal de Venta].Members ON 1
+FROM [Cubo_Albarran];
+
+
+/* ---------------------------------------------------------------------
+   KPI 8: Ventas por Segmento Demográfico de Cliente (Sexo y Rango Etario)
+   Operación: Crossjoin entre dimensiones demográficas.
+   --------------------------------------------------------------------- */
+SELECT
+    {
+        [Measures].[Numero de Ventas],
+        [Measures].[Monto Total],
+        [Measures].[Participacion Segmento Cliente %]
+    } ON 0,
+    NonEmpty(
+        [Dim Cliente].[Segmento Demográfico].[Sexo].Members *
+        [Dim Cliente].[Segmento Demográfico].[Rango Etario].Members,
+        [Measures].[Monto Total]
+    ) ON 1
+FROM [Cubo_Albarran];
+
+
+/* ---------------------------------------------------------------------
+   KPI 9: Frecuencia de Compra por Cartera de Clientes
+   Operación: Ratio de transacciones por cliente activo (365 / 20 = 18,25).
+   --------------------------------------------------------------------- */
+SELECT
+    {
+        [Measures].[Clientes Activos],
+        [Measures].[Numero de Ventas],
+        [Measures].[Frecuencia de Compra]
+    } ON 0
+FROM [Cubo_Albarran];
+
+
+/* ---------------------------------------------------------------------
+   KPI 10: Descuento Promedio Otorgado (%)
+   Operación: Monitoreo de política de descuentos comerciales.
+   --------------------------------------------------------------------- */
+SELECT
+    {
+        [Measures].[Monto Bruto],
+        [Measures].[Monto Descuento],
+        [Measures].[Monto Total],
+        [Measures].[Descuento Promedio %]
+    } ON 0
+FROM [Cubo_Albarran];
+
+
+/* ---------------------------------------------------------------------
+   Consulta Adicional: Estacionalidad y Comportamiento por Día de Semana
+   Operación: Análisis cruzado de Día de Semana y Estación del Año.
+   --------------------------------------------------------------------- */
+SELECT
+    {
+        [Measures].[Numero de Ventas],
+        [Measures].[Monto Total]
+    } ON 0,
+    [Dim Tiempo].[Día de Semana].[Día de Semana].Members ON 1
+FROM [Cubo_Albarran];

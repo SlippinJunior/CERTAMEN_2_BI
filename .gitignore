@@ -1,0 +1,47 @@
+# =====================================================================
+# .gitignore - Mueblería Albarrán (Inteligencia de Negocios)
+# =====================================================================
+
+# Documentos del enunciado del caso y archivos temporales
+CASO1_CASOSEMESTRAL_BI.docx
+verificar_entregables.ps1
+hacer_backup_albarran.ps1
+
+# Scripts auxiliares de generación y construcción interna
+docs/construir_informe_final.ps1
+docs/construir_presentacion_final.ps1
+docs/generar_imagenes_fase2.ps1
+docs/generar_presentacion_final.py
+docs/ver_slides.ps1
+docs/inspeccionar_pptx.ps1
+
+# Archivos de Power BI binarios y exportaciones HTML (según requerimiento de entrega)
+*.pbix
+*.pbit
+*.html
+
+# Archivos temporales de Microsoft Office
+~$*.docx
+~$*.pptx
+~$*.xlsx
+
+# Visual Studio / SSIS / SSAS - Archivos de usuario, caché y compilación
+.vs/
+*.user
+*.suo
+*.userosscache
+*.pidb
+bin/
+obj/
+TestResults/
+*.log
+
+# Archivos de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos del Sistema Operativo
+Thumbs.db
+Desktop.ini
+.DS_Store
